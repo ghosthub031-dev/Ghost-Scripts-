@@ -135,6 +135,7 @@
   }
   .status.live{color:var(--accent-green); background:rgba(126,231,135,.1);}
   .status.beta{color:var(--accent-amber); background:rgba(255,203,106,.1);}
+  .status.patched{color:var(--accent-red); background:rgba(242,139,130,.1);}
   .app-desc{color:var(--text-dim); font-size:13.5px; margin-bottom:14px;}
   .tags{display:flex; flex-wrap:wrap; gap:6px;}
   .tag{
@@ -202,7 +203,6 @@
     overflow-x:auto;
     line-height:1.6;
     word-break:break-all;
-    user-select:all;
   }
 
   .copy-btn{
@@ -273,6 +273,29 @@
     opacity:1;
   }
 
+  .social-links{
+    text-align:center;
+    margin-top:20px;
+    margin-bottom:10px;
+  }
+  .social-links a{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:13px;
+    color:#ff0000;
+    text-decoration:none;
+    background:rgba(255,0,0,.1);
+    padding:8px 16px;
+    border-radius:20px;
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+    transition:all .15s;
+  }
+  .social-links a:hover{
+    background:rgba(255,0,0,.2);
+    transform:translateY(-1px);
+  }
+
   footer{
     margin-top:32px;
     font-family:'IBM Plex Mono', monospace;
@@ -294,25 +317,26 @@
       <button class="tab active" data-tab="executores">
         <span class="dot"></span> executores <span class="ext">.lua</span>
       </button>
+      <button class="tab" data-tab="projetos">
+        <span class="dot"></span> projetos <span class="ext">.lua</span>
+      </button>
       <button class="tab" data-tab="scripts">
         <span class="dot"></span> scripts <span class="ext">.lua</span>
       </button>
-      <button class="tab" data-tab="robloxlite">
-        <span class="dot"></span> roblox lite <span class="ext">.apk</span>
-      </button>
+
     </div>
 
     <div class="panel">
       <!-- EXECUTORES -->
       <section class="panel-section active" id="executores">
-        <div class="section-label">// executores disponíveis</div>
+        <div class="section-label">// executores disponiveis</div>
         <div class="app-grid">
           <div class="app-card">
             <div class="app-card-top">
               <span class="app-name">Delta</span>
               <span class="status live">funcionando</span>
             </div>
-            <p class="app-desc">Executor free com key system. Interface moderna e suporte a scripts avançados.</p>
+            <p class="app-desc">Executor free com key system. Interface moderna e suporte a scripts avancados.</p>
             <div class="tags"><span class="tag">Level 7</span><span class="tag">Free</span><span class="tag">Windows</span></div>
             <a href="https://deltaexector.com" class="download-btn" target="_blank" rel="noopener">baixar delta</a>
           </div>
@@ -337,9 +361,9 @@
         </div>
       </section>
 
-      <!-- SCRIPTS -->
-      <section class="panel-section" id="scripts">
-        <div class="section-label">// scripts</div>
+      <!-- PROJETOS (seus scripts) -->
+      <section class="panel-section" id="projetos">
+        <div class="section-label">// meus projetos</div>
 
         <div class="script-card">
           <div class="game-badge">Blox Fruits</div>
@@ -364,7 +388,7 @@
         <div class="script-card">
           <div class="game-badge">FPS</div>
           <div class="script-header">
-            <span class="script-name">Ghost Hub (FPS)</span>
+            <span class="script-name">Ghost Hub</span>
             <span class="script-ver">v1.0</span>
           </div>
           <p class="script-desc">Hub universal para jogos FPS. Aimbot, wallhack, ESP, no recoil e mais.</p>
@@ -382,42 +406,45 @@
         </div>
       </section>
 
-      <!-- ROBLOX LITE -->
-      <section class="panel-section" id="robloxlite">
-        <div class="section-label">// roblox lite</div>
-        <div class="script-card">
-          <div class="game-badge">Android</div>
-          <div class="script-header">
-            <span class="script-name">Roblox Lite</span>
-            <span class="script-ver">v2.1</span>
-          </div>
-          <p class="script-desc">Versão otimizada do Roblox para dispositivos Android mais fracos. Menor consumo de RAM, carregamento mais rápido e melhor performance em jogos pesados.</p>
+      <!-- SCRIPTS (de outras pessoas) -->
+      <section class="panel-section" id="scripts">
+        <div class="section-label">// scripts da comunidade</div>
 
-          <a href="#" class="download-btn">baixar apk</a>
+        <div class="script-card">
+          <div class="game-badge">Blox Fruits</div>
+          <div class="script-header">
+            <span class="script-name">Banana Hub</span>
+            <span class="script-ver">v1.0</span>
+          </div>
+          <p class="script-desc">Hub completo para Blox Fruits com auto farm, raids, boss e mais.</p>
+
+          <div class="code-block" id="code3">loadstring(game:HttpGet("https://raw.githubusercontent.com/x2RunE/Immortal/refs/heads/main/BananaCat-Loader.lua"))()</div>
+          <button class="copy-btn" data-target="code3" data-text="loadstring(game:HttpGet(&quot;https://raw.githubusercontent.com/x2RunE/Immortal/refs/heads/main/BananaCat-Loader.lua&quot;))()">copiar script</button>
 
           <div class="features">
-            <span class="feature">Menor RAM</span>
-            <span class="feature">Carregamento Rápido</span>
-            <span class="feature">60 FPS</span>
-            <span class="feature">Sem Lag</span>
-            <span class="feature">Android 5.0+</span>
+            <span class="feature">Auto Farm</span>
+            <span class="feature">Raid</span>
+            <span class="feature">Boss</span>
+            <span class="feature">Sem Key</span>
           </div>
         </div>
       </section>
+
+
     </div>
 
-    <div class="social-links" style="text-align:center; margin-top:20px; margin-bottom:10px;">
-      <a href="https://youtube.com/@ghost.scripts.01?si=g0-JwrZYu3g2iQuc" target="_blank" rel="noopener" style="font-family:'IBM Plex Mono', monospace; font-size:13px; color:#ff0000; text-decoration:none; background:rgba(255,0,0,.1); padding:8px 16px; border-radius:20px; display:inline-flex; align-items:center; gap:8px; transition:all .15s;">
+    <div class="social-links">
+      <a href="https://youtube.com/@ghost.scripts.01?si=g0-JwrZYu3g2iQuc" target="_blank" rel="noopener">
         <span style="font-size:16px;">▶️</span> YouTube
       </a>
     </div>
+
     <footer>© 2026 GHOST SCRIPTS — executores e scripts para Roblox</footer>
   </div>
 
   <div class="toast" id="toast">script copiado!</div>
 
 <script>
-  // Tab switching
   document.querySelectorAll('.tab').forEach(function(tab){
     tab.addEventListener('click', function(){
       document.querySelectorAll('.tab').forEach(function(t){ t.classList.remove('active'); });
@@ -428,8 +455,7 @@
     });
   });
 
-  // Copy function
-  function doCopy(btn, text){
+  function copyScript(btn, text){
     var toast = document.getElementById('toast');
 
     function showToast(){
@@ -473,11 +499,10 @@
     }
   }
 
-  // Attach copy listeners
   document.querySelectorAll('.copy-btn').forEach(function(btn){
     btn.addEventListener('click', function(){
       var text = btn.getAttribute('data-text');
-      doCopy(btn, text);
+      copyScript(btn, text);
     });
   });
 </script>
