@@ -206,7 +206,13 @@
     word-break:break-all;
   }
 
-  .copy-btn{
+  .btn-row{
+    display:flex;
+    gap:8px;
+    margin-top:10px;
+    flex-wrap:wrap;
+  }
+  .copy-btn, .download-script-btn{
     font-family:'IBM Plex Mono', monospace;
     font-size:11px;
     color:var(--text-faint);
@@ -215,11 +221,12 @@
     border-radius:4px;
     padding:6px 14px;
     cursor:pointer;
-    margin-top:10px;
     transition:all .15s;
   }
-  .copy-btn:hover{color:var(--text); border-color:var(--accent-purple);}
+  .copy-btn:hover, .download-script-btn:hover{color:var(--text); border-color:var(--accent-purple);}
   .copy-btn.copied{color:var(--accent-green); border-color:var(--accent-green);}
+  .download-script-btn:hover{color:var(--text); border-color:var(--accent-blue);}
+  .download-script-btn.downloaded{color:var(--accent-blue); border-color:var(--accent-blue);}
 
   .download-btn{
     font-family:'IBM Plex Mono', monospace;
@@ -415,7 +422,10 @@
           </div>
 
           <div class="code-block" id="code4">loadstring(game:HttpGet("https://raw.githubusercontent.com/ghosthub031-dev/Ghost-rivals/refs/heads/main/DOC-20260824-WA0005.txt"))()</div>
-          <button class="copy-btn" data-target="code4" data-text="loadstring(game:HttpGet(&quot;https://raw.githubusercontent.com/ghosthub031-dev/Ghost-rivals/refs/heads/main/DOC-20260824-WA0005.txt&quot;))()">copiar script</button>
+          <div class="btn-row">
+            <button class="copy-btn" data-target="code4" data-text="loadstring(game:HttpGet(&quot;https://raw.githubusercontent.com/ghosthub031-dev/Ghost-rivals/refs/heads/main/DOC-20260824-WA0005.txt&quot;))()">copiar script</button>
+            <button class="download-script-btn" data-filename="ghost-scripts-rivals.lua" data-target="code4">baixar .lua</button>
+          </div>
 
           <div class="features">
             <span class="feature">FE-Safe</span>
@@ -435,7 +445,10 @@
           <p class="script-desc">Hub universal para jogos FPS. Aimbot, wallhack, ESP, no recoil e mais.</p>
 
           <div class="code-block" id="code2">loadstring(game:HttpGet("https://pastefy.app/1BoKlHYc/raw"))()</div>
-          <button class="copy-btn" data-target="code2" data-text="loadstring(game:HttpGet(&quot;https://pastefy.app/1BoKlHYc/raw&quot;))()">copiar script</button>
+          <div class="btn-row">
+            <button class="copy-btn" data-target="code2" data-text="loadstring(game:HttpGet(&quot;https://pastefy.app/1BoKlHYc/raw&quot;))()">copiar script</button>
+            <button class="download-script-btn" data-filename="ghost-hub-fps.lua" data-target="code2">baixar .lua</button>
+          </div>
 
           <div class="features">
             <span class="feature">Aimbot</span>
@@ -447,7 +460,7 @@
         </div>
       </section>
 
-      <!-- SCRIPTS (de outras pessoas) -->
+            <!-- SCRIPTS (de outras pessoas) -->
       <section class="panel-section" id="scripts">
         <div class="section-label">// scripts da comunidade</div>
 
@@ -460,7 +473,10 @@
           <p class="script-desc">Hub completo para Blox Fruits com auto farm, raids, boss e mais.</p>
 
           <div class="code-block" id="code7">loadstring(game:HttpGet("https://raw.githubusercontent.com/flazhy/QuantumOnyx/refs/heads/main/QuantumOnyx.lua"))()</div>
-          <button class="copy-btn" data-target="code7" data-text="loadstring(game:HttpGet(&quot;https://raw.githubusercontent.com/flazhy/QuantumOnyx/refs/heads/main/QuantumOnyx.lua&quot;))()">copiar script</button>
+          <div class="btn-row">
+            <button class="copy-btn" data-target="code7" data-text="loadstring(game:HttpGet(&quot;https://raw.githubusercontent.com/flazhy/QuantumOnyx/refs/heads/main/QuantumOnyx.lua&quot;))()">copiar script</button>
+            <button class="download-script-btn" data-filename="quantum-onyx-hub.lua" data-target="code7">baixar .lua</button>
+          </div>
 
           <div class="features">
             <span class="feature">Auto Farm</span>
@@ -479,7 +495,10 @@
           <p class="script-desc">Hub completo para Blox Fruits com auto farm, raids, boss e mais.</p>
 
           <div class="code-block" id="code6">loadstring(game:HttpGet("https://raw.githubusercontent.com/bloxfruitsnokey/Redz-Hub/refs/heads/main/Lavz/script.luau"))()</div>
-          <button class="copy-btn" data-target="code6" data-text="loadstring(game:HttpGet(&quot;https://raw.githubusercontent.com/bloxfruitsnokey/Redz-Hub/refs/heads/main/Lavz/script.luau&quot;))()">copiar script</button>
+          <div class="btn-row">
+            <button class="copy-btn" data-target="code6" data-text="loadstring(game:HttpGet(&quot;https://raw.githubusercontent.com/bloxfruitsnokey/Redz-Hub/refs/heads/main/Lavz/script.luau&quot;))()">copiar script</button>
+            <button class="download-script-btn" data-filename="lavz-hub.lua" data-target="code6">baixar .lua</button>
+          </div>
 
           <div class="features">
             <span class="feature">Auto Farm</span>
@@ -498,7 +517,10 @@
           <p class="script-desc">Hub completo para Blox Fruits com auto farm, raids, boss e mais.</p>
 
           <div class="code-block" id="code5">loadstring(game:HttpGet("https://raw.githubusercontent.com/bloxfruitsnokey/Stellar/refs/heads/main/Comet/script.luau"))()</div>
-          <button class="copy-btn" data-target="code5" data-text="loadstring(game:HttpGet(&quot;https://raw.githubusercontent.com/bloxfruitsnokey/Stellar/refs/heads/main/Comet/script.luau&quot;))()">copiar script</button>
+          <div class="btn-row">
+            <button class="copy-btn" data-target="code5" data-text="loadstring(game:HttpGet(&quot;https://raw.githubusercontent.com/bloxfruitsnokey/Stellar/refs/heads/main/Comet/script.luau&quot;))()">copiar script</button>
+            <button class="download-script-btn" data-filename="comet-hub.lua" data-target="code5">baixar .lua</button>
+          </div>
 
           <div class="features">
             <span class="feature">Auto Farm</span>
@@ -517,7 +539,10 @@
           <p class="script-desc">Hub completo para Blox Fruits com auto farm, raids, boss e mais.</p>
 
           <div class="code-block" id="code3">loadstring(game:HttpGet("https://raw.githubusercontent.com/x2RunE/Immortal/refs/heads/main/BananaCat-Loader.lua"))()</div>
-          <button class="copy-btn" data-target="code3" data-text="loadstring(game:HttpGet(&quot;https://raw.githubusercontent.com/x2RunE/Immortal/refs/heads/main/BananaCat-Loader.lua&quot;))()">copiar script</button>
+          <div class="btn-row">
+            <button class="copy-btn" data-target="code3" data-text="loadstring(game:HttpGet(&quot;https://raw.githubusercontent.com/x2RunE/Immortal/refs/heads/main/BananaCat-Loader.lua&quot;))()">copiar script</button>
+            <button class="download-script-btn" data-filename="banana-hub.lua" data-target="code3">baixar .lua</button>
+          </div>
 
           <div class="features">
             <span class="feature">Auto Farm</span>
@@ -529,7 +554,7 @@
       </section>
     </div>
 
-       <div class="social-links">
+    <div class="social-links">
       <a href="https://youtube.com/@ghost.scripts.01?si=g0-JwrZYu3g2iQuc" target="_blank" rel="noopener">
         <span style="font-size:16px;">▶️</span> YouTube
       </a>
@@ -551,35 +576,36 @@
     });
   });
 
-  function copyScript(btn, text){
+  function showToast(msg){
     var toast = document.getElementById('toast');
+    toast.textContent = msg || 'script copiado!';
+    toast.classList.add('show');
+    setTimeout(function(){ toast.classList.remove('show'); }, 2000);
+  }
 
-    function showToast(){
-      toast.classList.add('show');
-      setTimeout(function(){ toast.classList.remove('show'); }, 2000);
-    }
+  function fallbackCopy(txt){
+    var ta = document.createElement('textarea');
+    ta.value = txt;
+    ta.style.cssText = 'position:fixed;left:-9999px;top:0;opacity:0;';
+    document.body.appendChild(ta);
+    ta.focus();
+    ta.select();
+    var ok = false;
+    try{
+      ok = document.execCommand('copy');
+    }catch(e){}
+    document.body.removeChild(ta);
+    return ok;
+  }
 
-    function fallbackCopy(txt){
-      var ta = document.createElement('textarea');
-      ta.value = txt;
-      ta.style.cssText = 'position:fixed;left:-9999px;top:0;opacity:0;';
-      document.body.appendChild(ta);
-      ta.focus();
-      ta.select();
-      var ok = false;
-      try{
-        ok = document.execCommand('copy');
-      }catch(e){}
-      document.body.removeChild(ta);
-      return ok;
-    }
-
+  function copyScript(btn, text){
     function setCopied(){
+      var original = btn.textContent;
       btn.textContent = 'copiado!';
       btn.classList.add('copied');
-      showToast();
+      showToast('script copiado!');
       setTimeout(function(){
-        btn.textContent = 'copiar script';
+        btn.textContent = original;
         btn.classList.remove('copied');
       }, 2000);
     }
@@ -601,6 +627,37 @@
       copyScript(btn, text);
     });
   });
+
+  function downloadScript(btn){
+    var targetId = btn.getAttribute('data-target');
+    var filename = btn.getAttribute('data-filename');
+    var code = document.getElementById(targetId).textContent;
+
+    var blob = new Blob([code], {type: 'text/plain'});
+    var url = URL.createObjectURL(blob);
+    var a = document.createElement('a');
+    a.href = url;
+    a.download = filename;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+
+    var original = btn.textContent;
+    btn.textContent = 'baixado!';
+    btn.classList.add('downloaded');
+    showToast('arquivo baixado!');
+    setTimeout(function(){
+      btn.textContent = original;
+      btn.classList.remove('downloaded');
+    }, 2000);
+  }
+
+  document.querySelectorAll('.download-script-btn').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      downloadScript(btn);
+    });
+  });
 </script>
 </body>
-</html>
+</html>a
