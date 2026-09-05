@@ -329,6 +329,36 @@
     font-size:16px;
     flex-shrink:0;
   }
+
+  .sub-tabbar{
+    display:flex;
+    gap:8px;
+    margin-bottom:20px;
+    flex-wrap:wrap;
+  }
+  .sub-tab{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:12px;
+    color:var(--text-faint);
+    padding:8px 16px;
+    border:1px solid var(--line);
+    border-radius:6px;
+    background:var(--bg-raised);
+    cursor:pointer;
+    display:flex; align-items:center; gap:8px;
+    transition:all .15s;
+  }
+  .sub-tab:hover{color:var(--text-dim); border-color:var(--accent-purple);}
+  .sub-tab.active{
+    color:var(--text);
+    border-color:var(--accent-purple);
+    background:rgba(179,146,240,.08);
+  }
+  .sub-tab .dot{width:6px; height:6px; border-radius:50%; background:var(--text-faint);}
+  .sub-tab.active .dot{background:var(--accent-green);}
+  .script-page{display:none;}
+  .script-page.active{display:block; animation:fadein .25s ease;}
+
 </style>
 </head>
 <body>
@@ -404,365 +434,381 @@
         </div>
       </section>
 
-      <!-- PROJETOS (seus scripts) -->
-      <section class="panel-section" id="projetos">
+       <!-- PROJETOS (seus scripts) -->
+            <section class="panel-section" id="projetos">
         <div class="section-label">// meus projetos</div>
 
-        <div class="script-card">
-          <div class="game-badge">Rivals</div>
-          <div class="script-header">
-            <span class="script-name">Ghost Scripts</span>
-            <span class="script-ver">v1.0 beta ⚠️</span>
-          </div>
-          <p class="script-desc">Script completo para Rivals. Features avancadas e otimizado para melhor performance no jogo.</p>
-
-          <div class="warning-box">
-            <span class="icon">⚠️</span>
-            <span>Nao use em conta principal! Risco de banimento detectado.</span>
-          </div>
-
-          <div class="code-block" id="code4">loadstring(game:HttpGet("https://raw.githubusercontent.com/ghosthub031-dev/Ghost-rivals/refs/heads/main/DOC-20260824-WA0005.txt"))()</div>
-          <div class="btn-row">
-            <button class="copy-btn" data-target="code4" data-text="loadstring(game:HttpGet(&quot;https://raw.githubusercontent.com/ghosthub031-dev/Ghost-rivals/refs/heads/main/DOC-20260824-WA0005.txt&quot;))()">copiar script</button>
-            <button class="download-script-btn" data-filename="ghost-scripts-rivals.lua" data-target="code4">baixar .lua</button>
-          </div>
-
-          <div class="features">
-            <span class="feature">FE-Safe</span>
-            <span class="feature">Sem Key</span>
-            <span class="feature">Auto-Update</span>
-            <span class="feature">Mobile</span>
-            <span class="feature">Rivals</span>
-          </div>
+        <div class="sub-tabbar" id="projetos-paginator">
+          <button class="sub-tab active" data-page="1">
+            <span class="dot"></span> pagina 1
+          </button>
         </div>
 
-        <div class="script-card">
-          <div class="game-badge">FPS</div>
-          <div class="script-header">
-            <span class="script-name">Ghost Hub</span>
-            <span class="script-ver">v1.0</span>
+        <div class="script-page active" data-page="1">
+  <div class="script-card">
+            <div class="game-badge">Rivals</div>
+            <div class="script-header">
+              <span class="script-name">Ghost Scripts</span>
+              <span class="script-ver">v1.0 beta ⚠️</span>
+            </div>
+            <p class="script-desc">Script completo para Rivals. Features avancadas e otimizado para melhor performance no jogo.</p>
+  
+            <div class="warning-box">
+              <span class="icon">⚠️</span>
+              <span>Nao use em conta principal! Risco de banimento detectado.</span>
+            </div>
+  
+            <div class="code-block" id="code4">loadstring(game:HttpGet("https://raw.githubusercontent.com/ghosthub031-dev/Ghost-rivals/refs/heads/main/DOC-20260824-WA0005.txt"))()</div>
+            <div class="btn-row">
+              <button class="copy-btn" data-target="code4" data-text="loadstring(game:HttpGet(&quot;https://raw.githubusercontent.com/ghosthub031-dev/Ghost-rivals/refs/heads/main/DOC-20260824-WA0005.txt&quot;))()">copiar script</button>
+              <button class="download-script-btn" data-filename="ghost-scripts-rivals.lua" data-target="code4">baixar .lua</button>
+            </div>
+  
+            <div class="features">
+              <span class="feature">FE-Safe</span>
+              <span class="feature">Sem Key</span>
+              <span class="feature">Auto-Update</span>
+              <span class="feature">Mobile</span>
+              <span class="feature">Rivals</span>
+            </div>
           </div>
-          <p class="script-desc">Hub universal para jogos FPS. Aimbot, wallhack, ESP, no recoil e mais.</p>
-
-          <div class="code-block" id="code2">loadstring(game:HttpGet("https://pastefy.app/1BoKlHYc/raw"))()</div>
-          <div class="btn-row">
-            <button class="copy-btn" data-target="code2" data-text="loadstring(game:HttpGet(&quot;https://pastefy.app/1BoKlHYc/raw&quot;))()">copiar script</button>
-            <button class="download-script-btn" data-filename="ghost-hub-fps.lua" data-target="code2">baixar .lua</button>
+  <div class="script-card">
+            <div class="game-badge">FPS</div>
+            <div class="script-header">
+              <span class="script-name">Ghost Hub</span>
+              <span class="script-ver">v1.0</span>
+            </div>
+            <p class="script-desc">Hub universal para jogos FPS. Aimbot, wallhack, ESP, no recoil e mais.</p>
+  
+            <div class="code-block" id="code2">loadstring(game:HttpGet("https://pastefy.app/1BoKlHYc/raw"))()</div>
+            <div class="btn-row">
+              <button class="copy-btn" data-target="code2" data-text="loadstring(game:HttpGet(&quot;https://pastefy.app/1BoKlHYc/raw&quot;))()">copiar script</button>
+              <button class="download-script-btn" data-filename="ghost-hub-fps.lua" data-target="code2">baixar .lua</button>
+            </div>
+  
+            <div class="features">
+              <span class="feature">Aimbot</span>
+              <span class="feature">Wallhack</span>
+              <span class="feature">ESP</span>
+              <span class="feature">No Recoil</span>
+              <span class="feature">Sem Key</span>
+            </div>
           </div>
-
-          <div class="features">
-            <span class="feature">Aimbot</span>
-            <span class="feature">Wallhack</span>
-            <span class="feature">ESP</span>
-            <span class="feature">No Recoil</span>
-            <span class="feature">Sem Key</span>
+  <div class="script-card">
+            <div class="game-badge">Blox Fruits</div>
+            <div class="script-header">
+              <span class="script-name">GHOST kaitun</span>
+              <span class="script-ver">v0.1 dev ⚠️</span>
+            </div>
+            <p class="script-desc">Kaitun completo para Blox Fruits. Auto farm, auto raid, auto sea 2/3, farm de itens e mais.</p>
+  
+            <div class="warning-box">
+              <span class="icon">⚠️</span>
+              <span>Script em desenvolvimento! Terá muitos bugs, mas serão resolvidos com o tempo.</span>
+            </div>
+  
+            <div class="code-block" id="code8">Config = {
+      Team = "Pirates",
+      Configuration = {
+          HopWhenIdle = true,
+          AutoHop = true,
+          AutoHopDelay = 60 * 60,
+          FpsBoost = false,
+          blackscreen = false,
+          LowGraphics = true
+      },
+      Items = {
+          AutoFullyMelees = true,
+          Saber = true,
+          CursedDualKatana = true,
+          SoulGuitar = true,
+          RaceV2 = true
+      },
+      Settings = {
+          StayInSea2UntilHaveDarkFragments = true
+      },
+      AutoSea2 = true,
+      AutoSea3 = true,
+      AutoRaidIce_TargetFragments = 5000
+  }
+  loadstring(game:HttpGet("https://raw.githubusercontent.com/ghosthub031-dev/Ghost-Scripts-kaitun/refs/heads/main/Kaitun"))()</div>
+            <div class="btn-row">
+              <button class="copy-btn" data-target="code8" data-text="Config = {
+      Team = &quot;Pirates&quot;,
+      Configuration = {
+          HopWhenIdle = true,
+          AutoHop = true,
+          AutoHopDelay = 60 * 60,
+          FpsBoost = false,
+          blackscreen = false,
+          LowGraphics = true
+      },
+      Items = {
+          AutoFullyMelees = true,
+          Saber = true,
+          CursedDualKatana = true,
+          SoulGuitar = true,
+          RaceV2 = true
+      },
+      Settings = {
+          StayInSea2UntilHaveDarkFragments = true
+      },
+      AutoSea2 = true,
+      AutoSea3 = true,
+      AutoRaidIce_TargetFragments = 5000
+  }
+  loadstring(game:HttpGet(&quot;https://raw.githubusercontent.com/ghosthub031-dev/Ghost-Scripts-kaitun/refs/heads/main/Kaitun&quot;))()">copiar script</button>
+              <button class="download-script-btn" data-filename="ghost-kaitun.lua" data-target="code8">baixar .lua</button>
+            </div>
+  
+            <div class="features">
+              <span class="feature">Auto Farm</span>
+              <span class="feature">Auto Raid</span>
+              <span class="feature">Auto Sea 2/3</span>
+              <span class="feature">Farm Itens</span>
+              <span class="feature">Sem Key</span>
+            </div>
           </div>
-        </div>
-        <div class="script-card">
-          <div class="game-badge">Blox Fruits</div>
-          <div class="script-header">
-            <span class="script-name">GHOST kaitun</span>
-            <span class="script-ver">v0.1 dev ⚠️</span>
-          </div>
-          <p class="script-desc">Kaitun completo para Blox Fruits. Auto farm, auto raid, auto sea 2/3, farm de itens e mais.</p>
-
-          <div class="warning-box">
-            <span class="icon">⚠️</span>
-            <span>Script em desenvolvimento! Terá muitos bugs, mas serão resolvidos com o tempo.</span>
-          </div>
-
-          <div class="code-block" id="code8">Config = {
-    Team = "Pirates",
-    Configuration = {
-        HopWhenIdle = true,
-        AutoHop = true,
-        AutoHopDelay = 60 * 60,
-        FpsBoost = false,
-        blackscreen = false,
-        LowGraphics = true
-    },
-    Items = {
-        AutoFullyMelees = true,
-        Saber = true,
-        CursedDualKatana = true,
-        SoulGuitar = true,
-        RaceV2 = true
-    },
-    Settings = {
-        StayInSea2UntilHaveDarkFragments = true
-    },
-    AutoSea2 = true,
-    AutoSea3 = true,
-    AutoRaidIce_TargetFragments = 5000
-}
-loadstring(game:HttpGet("https://raw.githubusercontent.com/ghosthub031-dev/Ghost-Scripts-kaitun/refs/heads/main/Kaitun"))()</div>
-          <div class="btn-row">
-            <button class="copy-btn" data-target="code8" data-text="Config = {
-    Team = &quot;Pirates&quot;,
-    Configuration = {
-        HopWhenIdle = true,
-        AutoHop = true,
-        AutoHopDelay = 60 * 60,
-        FpsBoost = false,
-        blackscreen = false,
-        LowGraphics = true
-    },
-    Items = {
-        AutoFullyMelees = true,
-        Saber = true,
-        CursedDualKatana = true,
-        SoulGuitar = true,
-        RaceV2 = true
-    },
-    Settings = {
-        StayInSea2UntilHaveDarkFragments = true
-    },
-    AutoSea2 = true,
-    AutoSea3 = true,
-    AutoRaidIce_TargetFragments = 5000
-}
-loadstring(game:HttpGet(&quot;https://raw.githubusercontent.com/ghosthub031-dev/Ghost-Scripts-kaitun/refs/heads/main/Kaitun&quot;))()">copiar script</button>
-            <button class="download-script-btn" data-filename="ghost-kaitun.lua" data-target="code8">baixar .lua</button>
-          </div>
-
-          <div class="features">
-            <span class="feature">Auto Farm</span>
-            <span class="feature">Auto Raid</span>
-            <span class="feature">Auto Sea 2/3</span>
-            <span class="feature">Farm Itens</span>
-            <span class="feature">Sem Key</span>
-          </div>
-        </div>
-        <div class="script-card">
-          <div class="game-badge">Egg Steal</div>
-          <div class="script-header">
-            <span class="script-name">Ghost Hub</span>
-            <span class="script-ver">v1.0</span>
-          </div>
-          <p class="script-desc">Script completo para Egg Steal. Auto farm de ovos, teleporte e mais.</p>
-
-          <div class="code-block" id="code11">loadstring(game:HttpGet("https://raw.githubusercontent.com/ghosthub031-dev/Kkk-roube-um-ovo/refs/heads/main/Roube%20um%20ovo%20para%20mim"))()</div>
-          <div class="btn-row">
-            <button class="copy-btn" data-target="code11" data-text="loadstring(game:HttpGet(&quot;https://raw.githubusercontent.com/ghosthub031-dev/Kkk-roube-um-ovo/refs/heads/main/Roube%20um%20ovo%20para%20mim&quot;))()">copiar script</button>
-            <button class="download-script-btn" data-filename="ghost-hub-egg-steal.lua" data-target="code11">baixar .lua</button>
-          </div>
-
-          <div class="features">
-            <span class="feature">Auto Farm</span>
-            <span class="feature">Teleporte</span>
-            <span class="feature">Sem Key</span>
+  <div class="script-card">
+            <div class="game-badge">Egg Steal</div>
+            <div class="script-header">
+              <span class="script-name">Ghost Hub</span>
+              <span class="script-ver">v1.0</span>
+            </div>
+            <p class="script-desc">Script completo para Egg Steal. Auto farm de ovos, teleporte e mais.</p>
+  
+            <div class="code-block" id="code11">loadstring(game:HttpGet("https://raw.githubusercontent.com/ghosthub031-dev/Kkk-roube-um-ovo/refs/heads/main/Roube%20um%20ovo%20para%20mim"))()</div>
+            <div class="btn-row">
+              <button class="copy-btn" data-target="code11" data-text="loadstring(game:HttpGet(&quot;https://raw.githubusercontent.com/ghosthub031-dev/Kkk-roube-um-ovo/refs/heads/main/Roube%20um%20ovo%20para%20mim&quot;))()">copiar script</button>
+              <button class="download-script-btn" data-filename="ghost-hub-egg-steal.lua" data-target="code11">baixar .lua</button>
+            </div>
+  
+            <div class="features">
+              <span class="feature">Auto Farm</span>
+              <span class="feature">Teleporte</span>
+              <span class="feature">Sem Key</span>
+            </div>
           </div>
         </div>
 
       </section>
 
       <!-- SCRIPTS (de outras pessoas) -->
-      <section class="panel-section" id="scripts">
+            <section class="panel-section" id="scripts">
         <div class="section-label">// scripts da comunidade</div>
-        <div class="script-card">
-          <div class="game-badge">Blox Fruits</div>
-          <div class="script-header">
-            <span class="script-name">W-azure</span>
-            <span class="script-ver">v1.0</span>
-          </div>
-          <p class="script-desc">Script completo para Blox Fruits com auto farm, raids, boss, PvP e mais. Loader via Luarmor.</p>
 
-          <div class="code-block" id="code10">getgenv().Team = "Pirates"
-getgenv().SlowLoadUi = false
-getgenv().FixCrash = true
-getgenv().FixCrash2 = true
-getgenv().ForceUseSilentAim = false
-getgenv().AutoLoad = true
-loadstring(game:HttpGet("https://api.luarmor.net/files/v4/loaders/93db9b315179221830e07706f0e2c59a.lua"))()</div>
-          <div class="btn-row">
-            <button class="copy-btn" data-target="code10" data-text="getgenv().Team = &quot;Pirates&quot;
-getgenv().SlowLoadUi = false
-getgenv().FixCrash = true
-getgenv().FixCrash2 = true
-getgenv().ForceUseSilentAim = false
-getgenv().AutoLoad = true
-loadstring(game:HttpGet(&quot;https://api.luarmor.net/files/v4/loaders/93db9b315179221830e07706f0e2c59a.lua&quot;))()">copiar script</button>
-            <button class="download-script-btn" data-filename="w-azure-blox-fruits.lua" data-target="code10">baixar .lua</button>
-          </div>
+        <div class="sub-tabbar" id="scripts-paginator">
+          <button class="sub-tab active" data-page="1">
+            <span class="dot"></span> pagina 1
+          </button>
+          <button class="sub-tab" data-page="2">
+            <span class="dot"></span> pagina 2
+          </button>
+        </div>
 
-          <div class="features">
-            <span class="feature">Auto Farm</span>
-            <span class="feature">Raid</span>
-            <span class="feature">Boss</span>
-            <span class="feature">PvP</span>
-            <span class="feature">Silent Aim</span>
+        <div class="script-page active" data-page="1">
+  <div class="script-card">
+            <div class="game-badge">Blox Fruits</div>
+            <div class="script-header">
+              <span class="script-name">W-azure</span>
+              <span class="script-ver">v1.0</span>
+            </div>
+            <p class="script-desc">Script completo para Blox Fruits com auto farm, raids, boss, PvP e mais. Loader via Luarmor.</p>
+  
+            <div class="code-block" id="code10">getgenv().Team = "Pirates"
+  getgenv().SlowLoadUi = false
+  getgenv().FixCrash = true
+  getgenv().FixCrash2 = true
+  getgenv().ForceUseSilentAim = false
+  getgenv().AutoLoad = true
+  loadstring(game:HttpGet("https://api.luarmor.net/files/v4/loaders/93db9b315179221830e07706f0e2c59a.lua"))()</div>
+            <div class="btn-row">
+              <button class="copy-btn" data-target="code10" data-text="getgenv().Team = &quot;Pirates&quot;
+  getgenv().SlowLoadUi = false
+  getgenv().FixCrash = true
+  getgenv().FixCrash2 = true
+  getgenv().ForceUseSilentAim = false
+  getgenv().AutoLoad = true
+  loadstring(game:HttpGet(&quot;https://api.luarmor.net/files/v4/loaders/93db9b315179221830e07706f0e2c59a.lua&quot;))()">copiar script</button>
+              <button class="download-script-btn" data-filename="w-azure-blox-fruits.lua" data-target="code10">baixar .lua</button>
+            </div>
+  
+            <div class="features">
+              <span class="feature">Auto Farm</span>
+              <span class="feature">Raid</span>
+              <span class="feature">Boss</span>
+              <span class="feature">PvP</span>
+              <span class="feature">Silent Aim</span>
+            </div>
+          </div>
+  <div class="script-card">
+            <div class="game-badge">Blox Fruits</div>
+            <div class="script-header">
+              <span class="script-name">GHOST kaitun</span>
+              <span class="script-ver">v0.1 dev ⚠️</span>
+            </div>
+            <p class="script-desc">Kaitun completo para Blox Fruits. Auto farm, auto raid, auto sea 2/3, farm de itens e mais.</p>
+  
+            <div class="warning-box">
+              <span class="icon">⚠️</span>
+              <span>Script em desenvolvimento! Terá muitos bugs, mas serão resolvidos com o tempo.</span>
+            </div>
+  
+            <div class="code-block" id="code9">Config = {
+      Team = "Pirates",
+      Configuration = {
+          HopWhenIdle = true,
+          AutoHop = true,
+          AutoHopDelay = 60 * 60,
+          FpsBoost = false,
+          blackscreen = false,
+          LowGraphics = true
+      },
+      Items = {
+          AutoFullyMelees = true,
+          Saber = true,
+          CursedDualKatana = true,
+          SoulGuitar = true,
+          RaceV2 = true
+      },
+      Settings = {
+          StayInSea2UntilHaveDarkFragments = true
+      },
+      AutoSea2 = true,
+      AutoSea3 = true,
+      AutoRaidIce_TargetFragments = 5000
+  }
+  loadstring(game:HttpGet("https://raw.githubusercontent.com/ghosthub031-dev/Ghost-Scripts-kaitun/refs/heads/main/Kaitun"))()</div>
+            <div class="btn-row">
+              <button class="copy-btn" data-target="code9" data-text="Config = {
+      Team = &quot;Pirates&quot;,
+      Configuration = {
+          HopWhenIdle = true,
+          AutoHop = true,
+          AutoHopDelay = 60 * 60,
+          FpsBoost = false,
+          blackscreen = false,
+          LowGraphics = true
+      },
+      Items = {
+          AutoFullyMelees = true,
+          Saber = true,
+          CursedDualKatana = true,
+          SoulGuitar = true,
+          RaceV2 = true
+      },
+      Settings = {
+          StayInSea2UntilHaveDarkFragments = true
+      },
+      AutoSea2 = true,
+      AutoSea3 = true,
+      AutoRaidIce_TargetFragments = 5000
+  }
+  loadstring(game:HttpGet(&quot;https://raw.githubusercontent.com/ghosthub031-dev/Ghost-Scripts-kaitun/refs/heads/main/Kaitun&quot;))()">copiar script</button>
+              <button class="download-script-btn" data-filename="ghost-kaitun.lua" data-target="code9">baixar .lua</button>
+            </div>
+  
+            <div class="features">
+              <span class="feature">Auto Farm</span>
+              <span class="feature">Auto Raid</span>
+              <span class="feature">Auto Sea 2/3</span>
+              <span class="feature">Farm Itens</span>
+              <span class="feature">Sem Key</span>
+            </div>
+          </div>
+  <div class="script-card">
+            <div class="game-badge">Blox Fruits</div>
+            <div class="script-header">
+              <span class="script-name">Quantum Onyx Hub</span>
+              <span class="script-ver">v1.0</span>
+            </div>
+            <p class="script-desc">Hub completo para Blox Fruits com auto farm, raids, boss e mais.</p>
+  
+            <div class="code-block" id="code7">loadstring(game:HttpGet("https://raw.githubusercontent.com/flazhy/QuantumOnyx/refs/heads/main/QuantumOnyx.lua"))()</div>
+            <div class="btn-row">
+              <button class="copy-btn" data-target="code7" data-text="loadstring(game:HttpGet(&quot;https://raw.githubusercontent.com/flazhy/QuantumOnyx/refs/heads/main/QuantumOnyx.lua&quot;))()">copiar script</button>
+              <button class="download-script-btn" data-filename="quantum-onyx-hub.lua" data-target="code7">baixar .lua</button>
+            </div>
+  
+            <div class="features">
+              <span class="feature">Auto Farm</span>
+              <span class="feature">Raid</span>
+              <span class="feature">Boss</span>
+              <span class="feature">Sem Key</span>
+            </div>
+          </div>
+  <div class="script-card">
+            <div class="game-badge">Blox Fruits</div>
+            <div class="script-header">
+              <span class="script-name">LAVZ Hub</span>
+              <span class="script-ver">v1.0</span>
+            </div>
+            <p class="script-desc">Hub completo para Blox Fruits com auto farm, raids, boss e mais.</p>
+  
+            <div class="code-block" id="code6">loadstring(game:HttpGet("https://raw.githubusercontent.com/bloxfruitsnokey/Redz-Hub/refs/heads/main/Lavz/script.luau"))()</div>
+            <div class="btn-row">
+              <button class="copy-btn" data-target="code6" data-text="loadstring(game:HttpGet(&quot;https://raw.githubusercontent.com/bloxfruitsnokey/Redz-Hub/refs/heads/main/Lavz/script.luau&quot;))()">copiar script</button>
+              <button class="download-script-btn" data-filename="lavz-hub.lua" data-target="code6">baixar .lua</button>
+            </div>
+  
+            <div class="features">
+              <span class="feature">Auto Farm</span>
+              <span class="feature">Raid</span>
+              <span class="feature">Boss</span>
+              <span class="feature">Sem Key</span>
+            </div>
           </div>
         </div>
 
-
-        <div class="script-card">
-          <div class="game-badge">Blox Fruits</div>
-          <div class="script-header">
-            <span class="script-name">GHOST kaitun</span>
-            <span class="script-ver">v0.1 dev ⚠️</span>
+        <div class="script-page" data-page="2">
+  <div class="script-card">
+            <div class="game-badge">Blox Fruits</div>
+            <div class="script-header">
+              <span class="script-name">Comet Hub</span>
+              <span class="script-ver">v1.0</span>
+            </div>
+            <p class="script-desc">Hub completo para Blox Fruits com auto farm, raids, boss e mais.</p>
+  
+            <div class="code-block" id="code5">loadstring(game:HttpGet("https://raw.githubusercontent.com/bloxfruitsnokey/Stellar/refs/heads/main/Comet/script.luau"))()</div>
+            <div class="btn-row">
+              <button class="copy-btn" data-target="code5" data-text="loadstring(game:HttpGet(&quot;https://raw.githubusercontent.com/bloxfruitsnokey/Stellar/refs/heads/main/Comet/script.luau&quot;))()">copiar script</button>
+              <button class="download-script-btn" data-filename="comet-hub.lua" data-target="code5">baixar .lua</button>
+            </div>
+  
+            <div class="features">
+              <span class="feature">Auto Farm</span>
+              <span class="feature">Raid</span>
+              <span class="feature">Boss</span>
+              <span class="feature">Sem Key</span>
+            </div>
           </div>
-          <p class="script-desc">Kaitun completo para Blox Fruits. Auto farm, auto raid, auto sea 2/3, farm de itens e mais.</p>
-
-          <div class="warning-box">
-            <span class="icon">⚠️</span>
-            <span>Script em desenvolvimento! Terá muitos bugs, mas serão resolvidos com o tempo.</span>
-          </div>
-
-          <div class="code-block" id="code9">Config = {
-    Team = "Pirates",
-    Configuration = {
-        HopWhenIdle = true,
-        AutoHop = true,
-        AutoHopDelay = 60 * 60,
-        FpsBoost = false,
-        blackscreen = false,
-        LowGraphics = true
-    },
-    Items = {
-        AutoFullyMelees = true,
-        Saber = true,
-        CursedDualKatana = true,
-        SoulGuitar = true,
-        RaceV2 = true
-    },
-    Settings = {
-        StayInSea2UntilHaveDarkFragments = true
-    },
-    AutoSea2 = true,
-    AutoSea3 = true,
-    AutoRaidIce_TargetFragments = 5000
-}
-loadstring(game:HttpGet("https://raw.githubusercontent.com/ghosthub031-dev/Ghost-Scripts-kaitun/refs/heads/main/Kaitun"))()</div>
-          <div class="btn-row">
-            <button class="copy-btn" data-target="code9" data-text="Config = {
-    Team = &quot;Pirates&quot;,
-    Configuration = {
-        HopWhenIdle = true,
-        AutoHop = true,
-        AutoHopDelay = 60 * 60,
-        FpsBoost = false,
-        blackscreen = false,
-        LowGraphics = true
-    },
-    Items = {
-        AutoFullyMelees = true,
-        Saber = true,
-        CursedDualKatana = true,
-        SoulGuitar = true,
-        RaceV2 = true
-    },
-    Settings = {
-        StayInSea2UntilHaveDarkFragments = true
-    },
-    AutoSea2 = true,
-    AutoSea3 = true,
-    AutoRaidIce_TargetFragments = 5000
-}
-loadstring(game:HttpGet(&quot;https://raw.githubusercontent.com/ghosthub031-dev/Ghost-Scripts-kaitun/refs/heads/main/Kaitun&quot;))()">copiar script</button>
-            <button class="download-script-btn" data-filename="ghost-kaitun.lua" data-target="code9">baixar .lua</button>
-          </div>
-
-          <div class="features">
-            <span class="feature">Auto Farm</span>
-            <span class="feature">Auto Raid</span>
-            <span class="feature">Auto Sea 2/3</span>
-            <span class="feature">Farm Itens</span>
-            <span class="feature">Sem Key</span>
+  <div class="script-card">
+            <div class="game-badge">Blox Fruits</div>
+            <div class="script-header">
+              <span class="script-name">Banana Hub</span>
+              <span class="script-ver">v1.0</span>
+            </div>
+            <p class="script-desc">Hub completo para Blox Fruits com auto farm, raids, boss e mais.</p>
+  
+            <div class="code-block" id="code3">loadstring(game:HttpGet("https://raw.githubusercontent.com/x2RunE/Immortal/refs/heads/main/BananaCat-Loader.lua"))()</div>
+            <div class="btn-row">
+              <button class="copy-btn" data-target="code3" data-text="loadstring(game:HttpGet(&quot;https://raw.githubusercontent.com/x2RunE/Immortal/refs/heads/main/BananaCat-Loader.lua&quot;))()">copiar script</button>
+              <button class="download-script-btn" data-filename="banana-hub.lua" data-target="code3">baixar .lua</button>
+            </div>
+  
+            <div class="features">
+              <span class="feature">Auto Farm</span>
+              <span class="feature">Raid</span>
+              <span class="feature">Boss</span>
+              <span class="feature">Sem Key</span>
+            </div>
           </div>
         </div>
 
-
-        <div class="script-card">
-          <div class="game-badge">Blox Fruits</div>
-          <div class="script-header">
-            <span class="script-name">Quantum Onyx Hub</span>
-            <span class="script-ver">v1.0</span>
-          </div>
-          <p class="script-desc">Hub completo para Blox Fruits com auto farm, raids, boss e mais.</p>
-
-          <div class="code-block" id="code7">loadstring(game:HttpGet("https://raw.githubusercontent.com/flazhy/QuantumOnyx/refs/heads/main/QuantumOnyx.lua"))()</div>
-          <div class="btn-row">
-            <button class="copy-btn" data-target="code7" data-text="loadstring(game:HttpGet(&quot;https://raw.githubusercontent.com/flazhy/QuantumOnyx/refs/heads/main/QuantumOnyx.lua&quot;))()">copiar script</button>
-            <button class="download-script-btn" data-filename="quantum-onyx-hub.lua" data-target="code7">baixar .lua</button>
-          </div>
-
-          <div class="features">
-            <span class="feature">Auto Farm</span>
-            <span class="feature">Raid</span>
-            <span class="feature">Boss</span>
-            <span class="feature">Sem Key</span>
-          </div>
-        </div>
-
-        <div class="script-card">
-          <div class="game-badge">Blox Fruits</div>
-          <div class="script-header">
-            <span class="script-name">LAVZ Hub</span>
-            <span class="script-ver">v1.0</span>
-          </div>
-          <p class="script-desc">Hub completo para Blox Fruits com auto farm, raids, boss e mais.</p>
-
-          <div class="code-block" id="code6">loadstring(game:HttpGet("https://raw.githubusercontent.com/bloxfruitsnokey/Redz-Hub/refs/heads/main/Lavz/script.luau"))()</div>
-          <div class="btn-row">
-            <button class="copy-btn" data-target="code6" data-text="loadstring(game:HttpGet(&quot;https://raw.githubusercontent.com/bloxfruitsnokey/Redz-Hub/refs/heads/main/Lavz/script.luau&quot;))()">copiar script</button>
-            <button class="download-script-btn" data-filename="lavz-hub.lua" data-target="code6">baixar .lua</button>
-          </div>
-
-          <div class="features">
-            <span class="feature">Auto Farm</span>
-            <span class="feature">Raid</span>
-            <span class="feature">Boss</span>
-            <span class="feature">Sem Key</span>
-          </div>
-        </div>
-
-        <div class="script-card">
-          <div class="game-badge">Blox Fruits</div>
-          <div class="script-header">
-            <span class="script-name">Comet Hub</span>
-            <span class="script-ver">v1.0</span>
-          </div>
-          <p class="script-desc">Hub completo para Blox Fruits com auto farm, raids, boss e mais.</p>
-
-          <div class="code-block" id="code5">loadstring(game:HttpGet("https://raw.githubusercontent.com/bloxfruitsnokey/Stellar/refs/heads/main/Comet/script.luau"))()</div>
-          <div class="btn-row">
-            <button class="copy-btn" data-target="code5" data-text="loadstring(game:HttpGet(&quot;https://raw.githubusercontent.com/bloxfruitsnokey/Stellar/refs/heads/main/Comet/script.luau&quot;))()">copiar script</button>
-            <button class="download-script-btn" data-filename="comet-hub.lua" data-target="code5">baixar .lua</button>
-          </div>
-
-          <div class="features">
-            <span class="feature">Auto Farm</span>
-            <span class="feature">Raid</span>
-            <span class="feature">Boss</span>
-            <span class="feature">Sem Key</span>
-          </div>
-        </div>
-
-        <div class="script-card">
-          <div class="game-badge">Blox Fruits</div>
-          <div class="script-header">
-            <span class="script-name">Banana Hub</span>
-            <span class="script-ver">v1.0</span>
-          </div>
-          <p class="script-desc">Hub completo para Blox Fruits com auto farm, raids, boss e mais.</p>
-
-          <div class="code-block" id="code3">loadstring(game:HttpGet("https://raw.githubusercontent.com/x2RunE/Immortal/refs/heads/main/BananaCat-Loader.lua"))()</div>
-          <div class="btn-row">
-            <button class="copy-btn" data-target="code3" data-text="loadstring(game:HttpGet(&quot;https://raw.githubusercontent.com/x2RunE/Immortal/refs/heads/main/BananaCat-Loader.lua&quot;))()">copiar script</button>
-            <button class="download-script-btn" data-filename="banana-hub.lua" data-target="code3">baixar .lua</button>
-          </div>
-
-          <div class="features">
-            <span class="feature">Auto Farm</span>
-            <span class="feature">Raid</span>
-            <span class="feature">Boss</span>
-            <span class="feature">Sem Key</span>
-          </div>
-        </div>
       </section>
     </div>
 
-    <div class="social-links">
+<div class="social-links">
       <a href="https://youtube.com/@ghost.scripts.01?si=g0-JwrZYu3g2iQuc" target="_blank" rel="noopener">
         <span style="font-size:16px;">▶️</span> YouTube
       </a>
@@ -866,6 +912,35 @@ loadstring(game:HttpGet(&quot;https://raw.githubusercontent.com/ghosthub031-dev/
       downloadScript(btn);
     });
   });
+
+  // Paginação da aba scripts
+  document.querySelectorAll('#scripts-paginator .sub-tab').forEach(function(tab){
+    tab.addEventListener('click', function(){
+      var pageNum = tab.getAttribute('data-page');
+      // Atualizar tabs
+      document.querySelectorAll('#scripts-paginator .sub-tab').forEach(function(t){ t.classList.remove('active'); });
+      tab.classList.add('active');
+      // Atualizar páginas
+      document.querySelectorAll('#scripts .script-page').forEach(function(p){ p.classList.remove('active'); });
+      var targetPage = document.querySelector('#scripts .script-page[data-page="' + pageNum + '"]');
+      if(targetPage) targetPage.classList.add('active');
+    });
+  });
+
+
+  // Paginação da aba projetos
+  document.querySelectorAll('#projetos-paginator .sub-tab').forEach(function(tab){
+    tab.addEventListener('click', function(){
+      var pageNum = tab.getAttribute('data-page');
+      document.querySelectorAll('#projetos-paginator .sub-tab').forEach(function(t){ t.classList.remove('active'); });
+      tab.classList.add('active');
+      document.querySelectorAll('#projetos .script-page').forEach(function(p){ p.classList.remove('active'); });
+      var targetPage = document.querySelector('#projetos .script-page[data-page="' + pageNum + '"]');
+      if(targetPage) targetPage.classList.add('active');
+    });
+  });
+
 </script>
 </body>
 </html>
+    
