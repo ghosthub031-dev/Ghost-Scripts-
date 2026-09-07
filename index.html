@@ -170,14 +170,7 @@
     border-radius:20px;
     margin-bottom:12px;
   }
-  .script-header{
-    display:flex;
-    justify-content:space-between;
-    align-items:start;
-    gap:12px;
-    margin-bottom:12px;
-    flex-wrap:wrap;
-  }
+
   .script-name{
     font-family:'IBM Plex Mono', monospace;
     font-weight:700;
@@ -359,6 +352,27 @@
   .script-page{display:none;}
   .script-page.active{display:block; animation:fadein .25s ease;}
 
+
+  .script-header{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    margin-bottom:10px;
+    flex-wrap:nowrap;
+  }
+  .script-thumb-small{
+    width:60px;
+    height:34px;
+    object-fit:cover;
+    border-radius:4px;
+    border:1px solid var(--line);
+    flex-shrink:0;
+  }
+  .script-header-text{
+    flex:1;
+    min-width:0;
+  }
+
 </style>
 </head>
 <body>
@@ -446,13 +460,14 @@
 
         <div class="script-page active" data-page="1">
   <div class="script-card">
-          <img class="script-thumb" src="https://img.youtube.com/vi/UptOwedsDRk/maxresdefault.jpg" alt="Ghost Scripts" loading="lazy">
-
-            <div class="game-badge">Rivals</div>
-            <div class="script-header">
+          <div class="game-badge">Rivals</div>
+          <div class="script-header">
+            <img class="script-thumb-small" src="https://img.youtube.com/vi/UptOwedsDRk/maxresdefault.jpg" alt="Ghost Scripts" loading="lazy">
+            <div class="script-header-text">
               <span class="script-name">Ghost Scripts</span>
               <span class="script-ver">v1.0 beta ⚠️</span>
             </div>
+          </div>
             <p class="script-desc">Script completo para Rivals. Features avancadas e otimizado para melhor performance no jogo.</p>
   
             <div class="warning-box">
@@ -475,13 +490,14 @@
             </div>
           </div>
   <div class="script-card">
-          <img class="script-thumb" src="https://img.youtube.com/vi/FL6cEbyI_JU/maxresdefault.jpg" alt="Ghost Hub" loading="lazy">
-
-            <div class="game-badge">FPS</div>
-            <div class="script-header">
+          <div class="game-badge">FPS</div>
+          <div class="script-header">
+            <img class="script-thumb-small" src="https://img.youtube.com/vi/FL6cEbyI_JU/maxresdefault.jpg" alt="Ghost Hub" loading="lazy">
+            <div class="script-header-text">
               <span class="script-name">Ghost Hub</span>
               <span class="script-ver">v1.0</span>
             </div>
+          </div>
             <p class="script-desc">Hub universal para jogos FPS. Aimbot, wallhack, ESP, no recoil e mais.</p>
   
             <div class="code-block" id="code2">loadstring(game:HttpGet("https://pastefy.app/1BoKlHYc/raw"))()</div>
@@ -499,13 +515,14 @@
             </div>
           </div>
   <div class="script-card">
-          <img class="script-thumb" src="https://img.youtube.com/vi/vMeT83vzptc/maxresdefault.jpg" alt="GHOST kaitun" loading="lazy">
-
-            <div class="game-badge">Blox Fruits</div>
-            <div class="script-header">
+          <div class="game-badge">Blox Fruits</div>
+          <div class="script-header">
+            <img class="script-thumb-small" src="https://img.youtube.com/vi/vMeT83vzptc/maxresdefault.jpg" alt="GHOST kaitun" loading="lazy">
+            <div class="script-header-text">
               <span class="script-name">GHOST kaitun</span>
               <span class="script-ver">v0.1 dev ⚠️</span>
             </div>
+          </div>
             <p class="script-desc">Kaitun completo para Blox Fruits. Auto farm, auto raid, auto sea 2/3, farm de itens e mais.</p>
   
             <div class="warning-box">
@@ -576,13 +593,14 @@
             </div>
           </div>
   <div class="script-card">
-          <img class="script-thumb" src="https://img.youtube.com/vi/jQRMHEFKxAA/maxresdefault.jpg" alt="Ghost Hub" loading="lazy">
-
-            <div class="game-badge">Egg Steal</div>
-            <div class="script-header">
+          <div class="game-badge">Egg Steal</div>
+          <div class="script-header">
+            <img class="script-thumb-small" src="https://img.youtube.com/vi/jQRMHEFKxAA/maxresdefault.jpg" alt="Ghost Hub" loading="lazy">
+            <div class="script-header-text">
               <span class="script-name">Ghost Hub</span>
               <span class="script-ver">v1.0</span>
             </div>
+          </div>
             <p class="script-desc">Script completo para Egg Steal. Auto farm de ovos, teleporte e mais.</p>
   
             <div class="code-block" id="code11">loadstring(game:HttpGet("https://raw.githubusercontent.com/ghosthub031-dev/Kkk-roube-um-ovo/refs/heads/main/Roube%20um%20ovo%20para%20mim"))()</div>
@@ -616,13 +634,14 @@
 
         <div class="script-page active" data-page="1">
   <div class="script-card">
-          <img class="script-thumb" src="https://img.youtube.com/vi/1OmVz02Ul84/maxresdefault.jpg" alt="W-azure" loading="lazy">
-
-            <div class="game-badge">Blox Fruits</div>
-            <div class="script-header">
+          <div class="game-badge">Blox Fruits</div>
+          <div class="script-header">
+            <img class="script-thumb-small" src="https://img.youtube.com/vi/1OmVz02Ul84/maxresdefault.jpg" alt="W-azure" loading="lazy">
+            <div class="script-header-text">
               <span class="script-name">W-azure</span>
               <span class="script-ver">v1.0</span>
             </div>
+          </div>
             <p class="script-desc">Script completo para Blox Fruits com auto farm, raids, boss, PvP e mais. Loader via Luarmor.</p>
   
             <div class="code-block" id="code10">getgenv().Team = "Pirates"
@@ -652,13 +671,14 @@
             </div>
           </div>
   <div class="script-card">
-          <img class="script-thumb" src="https://img.youtube.com/vi/vMeT83vzptc/maxresdefault.jpg" alt="GHOST kaitun" loading="lazy">
-
-            <div class="game-badge">Blox Fruits</div>
-            <div class="script-header">
+          <div class="game-badge">Blox Fruits</div>
+          <div class="script-header">
+            <img class="script-thumb-small" src="https://img.youtube.com/vi/vMeT83vzptc/maxresdefault.jpg" alt="GHOST kaitun" loading="lazy">
+            <div class="script-header-text">
               <span class="script-name">GHOST kaitun</span>
               <span class="script-ver">v0.1 dev ⚠️</span>
             </div>
+          </div>
             <p class="script-desc">Kaitun completo para Blox Fruits. Auto farm, auto raid, auto sea 2/3, farm de itens e mais.</p>
   
             <div class="warning-box">
@@ -729,13 +749,14 @@
             </div>
           </div>
   <div class="script-card">
-          <img class="script-thumb" src="https://img.youtube.com/vi/ETeTClOfqc0/maxresdefault.jpg" alt="Quantum Onyx Hub" loading="lazy">
-
-            <div class="game-badge">Blox Fruits</div>
-            <div class="script-header">
+          <div class="game-badge">Blox Fruits</div>
+          <div class="script-header">
+            <img class="script-thumb-small" src="https://img.youtube.com/vi/ETeTClOfqc0/maxresdefault.jpg" alt="Quantum Onyx Hub" loading="lazy">
+            <div class="script-header-text">
               <span class="script-name">Quantum Onyx Hub</span>
               <span class="script-ver">v1.0</span>
             </div>
+          </div>
             <p class="script-desc">Hub completo para Blox Fruits com auto farm, raids, boss e mais.</p>
   
             <div class="code-block" id="code7">loadstring(game:HttpGet("https://raw.githubusercontent.com/flazhy/QuantumOnyx/refs/heads/main/QuantumOnyx.lua"))()</div>
@@ -752,13 +773,14 @@
             </div>
           </div>
   <div class="script-card">
-          <img class="script-thumb" src="https://img.youtube.com/vi/mxhA5LGJqnY/maxresdefault.jpg" alt="LAVZ Hub" loading="lazy">
-
-            <div class="game-badge">Blox Fruits</div>
-            <div class="script-header">
+          <div class="game-badge">Blox Fruits</div>
+          <div class="script-header">
+            <img class="script-thumb-small" src="https://img.youtube.com/vi/mxhA5LGJqnY/maxresdefault.jpg" alt="LAVZ Hub" loading="lazy">
+            <div class="script-header-text">
               <span class="script-name">LAVZ Hub</span>
               <span class="script-ver">v1.0</span>
             </div>
+          </div>
             <p class="script-desc">Hub completo para Blox Fruits com auto farm, raids, boss e mais.</p>
   
             <div class="code-block" id="code6">loadstring(game:HttpGet("https://raw.githubusercontent.com/bloxfruitsnokey/Redz-Hub/refs/heads/main/Lavz/script.luau"))()</div>
@@ -778,13 +800,14 @@
 
         <div class="script-page" data-page="2">
   <div class="script-card">
-          <img class="script-thumb" src="https://img.youtube.com/vi/9y313NnJq1U/maxresdefault.jpg" alt="Comet Hub" loading="lazy">
-
-            <div class="game-badge">Blox Fruits</div>
-            <div class="script-header">
+          <div class="game-badge">Blox Fruits</div>
+          <div class="script-header">
+            <img class="script-thumb-small" src="https://img.youtube.com/vi/9y313NnJq1U/maxresdefault.jpg" alt="Comet Hub" loading="lazy">
+            <div class="script-header-text">
               <span class="script-name">Comet Hub</span>
               <span class="script-ver">v1.0</span>
             </div>
+          </div>
             <p class="script-desc">Hub completo para Blox Fruits com auto farm, raids, boss e mais.</p>
   
             <div class="code-block" id="code5">loadstring(game:HttpGet("https://raw.githubusercontent.com/bloxfruitsnokey/Stellar/refs/heads/main/Comet/script.luau"))()</div>
@@ -801,13 +824,14 @@
             </div>
           </div>
   <div class="script-card">
-          <img class="script-thumb" src="https://img.youtube.com/vi/ORFZZc65Ivk/maxresdefault.jpg" alt="Banana Hub" loading="lazy">
-
-            <div class="game-badge">Blox Fruits</div>
-            <div class="script-header">
+          <div class="game-badge">Blox Fruits</div>
+          <div class="script-header">
+            <img class="script-thumb-small" src="https://img.youtube.com/vi/ORFZZc65Ivk/maxresdefault.jpg" alt="Banana Hub" loading="lazy">
+            <div class="script-header-text">
               <span class="script-name">Banana Hub</span>
               <span class="script-ver">v1.0</span>
             </div>
+          </div>
             <p class="script-desc">Hub completo para Blox Fruits com auto farm, raids, boss e mais.</p>
   
             <div class="code-block" id="code3">loadstring(game:HttpGet("https://raw.githubusercontent.com/x2RunE/Immortal/refs/heads/main/BananaCat-Loader.lua"))()</div>
@@ -962,4 +986,5 @@
 
 </script>
 </body>
-</html>                
+</html> 
+  
