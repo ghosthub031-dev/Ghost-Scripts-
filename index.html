@@ -352,7 +352,6 @@
   .script-page{display:none;}
   .script-page.active{display:block; animation:fadein .25s ease;}
 
-
   .script-header{
     display:flex;
     align-items:center;
@@ -619,7 +618,7 @@
 
       </section>
 
-             <!-- SCRIPTS (de outras pessoas) -->
+      <!-- SCRIPTS (de outras pessoas) -->
             <section class="panel-section" id="scripts">
         <div class="section-label">// scripts da comunidade</div>
 
@@ -847,7 +846,37 @@
               <span class="feature">Sem Key</span>
             </div>
           </div>
-        </div>
+        
+          
+
+
+          <div class="script-card">
+            <div class="game-badge">Blox Fruits</div>
+            <div class="script-header">
+              <img class="script-thumb-small" src="https://img.youtube.com/vi/Y8pU18DftjM/maxresdefault.jpg" alt="Teddy Hub" loading="lazy">
+              <div class="script-header-text">
+                <span class="script-name">Teddy Hub</span>
+                <span class="script-ver">v1.0</span>
+              </div>
+            </div>
+            <p class="script-desc">Hub completo para Blox Fruits com auto farm, raids, boss, PvP e mais. NO KEY!</p>
+            <div class="code-block" id="code12">repeat task.wait() until game:IsLoaded() and game:GetService("Players") and game.Players.LocalPlayer and game.Players.LocalPlayer:FindFirstChild("PlayerGui")
+loadstring(game:HttpGet("https://raw.githubusercontent.com/teddyhubdev/diepvy/refs/heads/main/TeddyHub.lua"))()</div>
+            <div class="btn-row">
+              <button class="copy-btn" data-target="code12" data-text="repeat task.wait() until game:IsLoaded() and game:GetService(&quot;Players&quot;) and game.Players.LocalPlayer and game.Players.LocalPlayer:FindFirstChild(&quot;PlayerGui&quot;)
+loadstring(game:HttpGet(&quot;https://raw.githubusercontent.com/teddyhubdev/diepvy/refs/heads/main/TeddyHub.lua&quot;))()">copiar script</button>
+              <button class="download-script-btn" data-filename="teddy-hub.lua" data-target="code12">baixar .lua</button>
+            </div>
+            <div class="features">
+              <span class="feature">Auto Farm</span>
+              <span class="feature">Raid</span>
+              <span class="feature">Boss</span>
+              <span class="feature">PvP</span>
+              <span class="feature">Sem Key</span>
+            </div>
+          </div>
+
+</div>
 
       </section>
     </div>
@@ -971,7 +1000,6 @@
     });
   });
 
-
   // Paginação da aba projetos
   document.querySelectorAll('#projetos-paginator .sub-tab').forEach(function(tab){
     tab.addEventListener('click', function(){
@@ -986,4 +1014,4 @@
 
 </script>
 </body>
-</html>                     
+</html>;                    
