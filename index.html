@@ -392,6 +392,9 @@
       <button class="tab" data-tab="scripts">
         <span class="dot"></span> scripts <span class="ext">.lua</span>
       </button>
+      <button class="tab" data-tab="antigos">
+        <span class="dot"></span> projetos antigos <span class="ext">.lua</span>
+      </button>
     </div>
 
     <div class="panel">
@@ -447,7 +450,7 @@
         </div>
       </section>
 
-             <!-- PROJETOS (seus scripts) -->
+        <!-- PROJETOS (seus scripts) -->
             <section class="panel-section" id="projetos">
         <div class="section-label">// meus projetos</div>
 
@@ -458,6 +461,29 @@
         </div>
 
         <div class="script-page active" data-page="1">
+  <div class="script-card">
+          <div class="game-badge">Hospital de Animais</div>
+          <div class="script-header">
+            <img class="script-thumb-small" src="https://img.youtube.com/vi/IIJhf57HxSU/maxresdefault.jpg" alt="Ghost Hub" loading="lazy">
+            <div class="script-header-text">
+              <span class="script-name">Ghost Hub</span>
+              <span class="script-ver">v1.0</span>
+            </div>
+          </div>
+            <p class="script-desc">Script completo para Hospital de Animais. Otimizado e pronto pra usar.</p>
+
+            <div class="code-block" id="code14">loadstring(game:HttpGet("https://raw.githubusercontent.com/ghosthub031-dev/Jdjtifgijtut/refs/heads/main/deepseek_lua_20260908_27a5b8%20(3).lua"))()</div>
+            <div class="btn-row">
+              <button class="copy-btn" data-target="code14" data-text="loadstring(game:HttpGet(&quot;https://raw.githubusercontent.com/ghosthub031-dev/Jdjtifgijtut/refs/heads/main/deepseek_lua_20260908_27a5b8%20(3).lua&quot;))()">copiar script</button>
+              <button class="download-script-btn" data-filename="ghost-hub-hospital-animais.lua" data-target="code14">baixar .lua</button>
+            </div>
+
+            <div class="features">
+              <span class="feature">Auto Farm</span>
+              <span class="feature">Sem Key</span>
+              <span class="feature">Hospital de Animais</span>
+            </div>
+          </div>
   <div class="script-card">
           <div class="game-badge">Rivals</div>
           <div class="script-header">
@@ -569,7 +595,7 @@
 
       </section>
 
-      <!-- SCRIPTS (de outras pessoas) -->
+            <!-- SCRIPTS (de outras pessoas) -->
             <section class="panel-section" id="scripts">
         <div class="section-label">// scripts da comunidade</div>
 
@@ -805,6 +831,47 @@ loadstring(game:HttpGet(&quot;https://raw.githubusercontent.com/teddyhubdev/diep
 </div>
 
       </section>
+
+      <!-- PROJETOS ANTIGOS (open source) -->
+      <section class="panel-section" id="antigos">
+        <div class="section-label">// projetos antigos (open source)</div>
+
+        <div class="sub-tabbar" id="antigos-paginator">
+          <button class="sub-tab active" data-page="1">
+            <span class="dot"></span> pagina 1
+          </button>
+        </div>
+
+        <div class="script-page active" data-page="1">
+
+          <!-- COPIE O MODELO ABAIXO PARA ADICIONAR UM PROJETO ANTIGO:
+
+          <div class="script-card">
+            <div class="game-badge">NOME DO JOGO</div>
+            <div class="script-header">
+              <img class="script-thumb-small" src="URL_DA_THUMB" alt="Nome do Script" loading="lazy">
+              <div class="script-header-text">
+                <span class="script-name">Nome do Script</span>
+                <span class="script-ver">v1.0</span>
+              </div>
+            </div>
+            <p class="script-desc">Descricao do projeto antigo.</p>
+            <div class="code-block" id="codeXX">loadstring(game:HttpGet("URL_DO_SCRIPT"))()</div>
+            <div class="btn-row">
+              <button class="copy-btn" data-target="codeXX" data-text="loadstring(game:HttpGet(&quot;URL_DO_SCRIPT&quot;))()">copiar script</button>
+              <button class="download-script-btn" data-filename="nome-do-script.lua" data-target="codeXX">baixar .lua</button>
+            </div>
+            <div class="features">
+              <span class="feature">Open Source</span>
+              <span class="feature">Sem Key</span>
+            </div>
+          </div>
+
+          -->
+
+        </div>
+
+      </section>
     </div>
 
     <div class="social-links">
@@ -926,6 +993,18 @@ loadstring(game:HttpGet(&quot;https://raw.githubusercontent.com/teddyhubdev/diep
     });
   });
 
+  // Paginação da aba projetos antigos
+  document.querySelectorAll('#antigos-paginator .sub-tab').forEach(function(tab){
+    tab.addEventListener('click', function(){
+      var pageNum = tab.getAttribute('data-page');
+      document.querySelectorAll('#antigos-paginator .sub-tab').forEach(function(t){ t.classList.remove('active'); });
+      tab.classList.add('active');
+      document.querySelectorAll('#antigos .script-page').forEach(function(p){ p.classList.remove('active'); });
+      var targetPage = document.querySelector('#antigos .script-page[data-page="' + pageNum + '"]');
+      if(targetPage) targetPage.classList.add('active');
+    });
+  });
+
   // Paginação da aba projetos
   document.querySelectorAll('#projetos-paginator .sub-tab').forEach(function(tab){
     tab.addEventListener('click', function(){
@@ -940,4 +1019,4 @@ loadstring(game:HttpGet(&quot;https://raw.githubusercontent.com/teddyhubdev/diep
 
 </script>
 </body>
-</html>          
+</html>
