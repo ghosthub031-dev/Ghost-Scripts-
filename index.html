@@ -450,7 +450,7 @@
         </div>
       </section>
 
-        <!-- PROJETOS (seus scripts) -->
+      <!-- PROJETOS (seus scripts) -->
             <section class="panel-section" id="projetos">
         <div class="section-label">// meus projetos</div>
 
@@ -595,7 +595,7 @@
 
       </section>
 
-            <!-- SCRIPTS (de outras pessoas) -->
+        <!-- SCRIPTS (de outras pessoas) -->
             <section class="panel-section" id="scripts">
         <div class="section-label">// scripts da comunidade</div>
 
@@ -606,9 +606,13 @@
           <button class="sub-tab" data-page="2">
             <span class="dot"></span> pagina 2
           </button>
+          <button class="sub-tab" data-page="3">
+            <span class="dot"></span> pagina 3
+          </button>
         </div>
 
         <div class="script-page active" data-page="1">
+
   <div class="script-card">
           <div class="game-badge">Blox Fruits</div>
           <div class="script-header">
@@ -830,10 +834,51 @@ loadstring(game:HttpGet(&quot;https://raw.githubusercontent.com/teddyhubdev/diep
 
 </div>
 
+        <div class="script-page" data-page="3">
+  <div class="script-card">
+          <div class="game-badge">Blox Fruits</div>
+          <div class="script-header">
+            <img class="script-thumb-small" src="https://img.youtube.com/vi/dE374M93550/maxresdefault.jpg" alt="Gravity Hub" loading="lazy">
+            <div class="script-header-text">
+              <span class="script-name">Gravity Hub</span>
+              <span class="script-ver">v1.0</span>
+            </div>
+          </div>
+            <p class="script-desc">Hub completo para Blox Fruits com auto farm, raids, boss, PvP e mais. Loader com configuracoes personalizaveis.</p>
+
+            <div class="code-block" id="code16">GravityHub = {
+    Key = "",
+    Team = "Pirates",
+    Color = "Red",
+    SaveSetting = false,
+    AutoExecute = false
+}
+loadstring(game:HttpGet("https://raw.githubusercontent.com/Dev-GravityHub/BloxFruit/refs/heads/main/MainPremium.lua"))()</div>
+            <div class="btn-row">
+              <button class="copy-btn" data-target="code16" data-text="GravityHub = {
+    Key = &quot;&quot;,
+    Team = &quot;Pirates&quot;,
+    Color = &quot;Red&quot;,
+    SaveSetting = false,
+    AutoExecute = false
+}
+loadstring(game:HttpGet(&quot;https://raw.githubusercontent.com/Dev-GravityHub/BloxFruit/refs/heads/main/MainPremium.lua&quot;))()">copiar script</button>
+              <button class="download-script-btn" data-filename="gravity-hub.lua" data-target="code16">baixar .lua</button>
+            </div>
+
+            <div class="features">
+              <span class="feature">Auto Farm</span>
+              <span class="feature">Raid</span>
+              <span class="feature">Boss</span>
+              <span class="feature">PvP</span>
+              <span class="feature">Sem Key</span>
+            </div>
+          </div>
+        </div>
+
       </section>
 
-      
-    <!-- PROJETOS ANTIGOS (open source) -->
+            <!-- PROJETOS ANTIGOS (open source) -->
       <section class="panel-section" id="antigos">
         <div class="section-label">// projetos antigos (open source)</div>
 
@@ -1046,4 +1091,4 @@ loadstring(game:HttpGet(&quot;https://raw.githubusercontent.com/teddyhubdev/diep
 
 </script>
 </body>
-</html>
+</html>    
