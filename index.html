@@ -1,766 +1,1148 @@
-GHOST SCRIPTS — CÓDIGO COMPLETO DA VERSÃO ATUALIZADA
-Projeto: ghost-scripts-upgrade
-Inclui: 9 executores, filtros Todos/Mobile/PC, abas de projetos, scripts e arquivo, status atualizados e paleta da referência.
-
-
-==============================================================================
-ARQUIVO: client/index.html
-==============================================================================
-
-<!doctype html>
+<!DOCTYPE html>
 <html lang="pt-BR">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="theme-color" content="#090a12" />
-    <meta name="description" content="GHOST SCRIPTS — scripts, hubs e ferramentas organizadas para Roblox." />
-    <title>GHOST SCRIPTS — Terminal Roxo</title>
-  </head>
-  <body>
-    <div id="root"></div>
-    <script type="module" src="/src/main.tsx"></script>
-    <script defer src="%VITE_ANALYTICS_ENDPOINT%/umami" data-website-id="%VITE_ANALYTICS_WEBSITE_ID%"></script>
-  </body>
-</html>
-
-
-
-==============================================================================
-ARQUIVO: client/src/App.tsx
-==============================================================================
-
-import { Toaster } from "@/components/ui/sonner";
-import { TooltipProvider } from "@/components/ui/tooltip";
-import NotFound from "@/pages/NotFound";
-import { Route, Switch } from "wouter";
-import ErrorBoundary from "./components/ErrorBoundary";
-import { ThemeProvider } from "./contexts/ThemeContext";
-import Home from "./pages/Home";
-
-function Router() {
-  return (
-    <Switch>
-      <Route path="/" component={Home} />
-      <Route path="/404" component={NotFound} />
-      <Route component={NotFound} />
-    </Switch>
-  );
-}
-
-export default function App() {
-  return (
-    <ErrorBoundary>
-      <ThemeProvider defaultTheme="dark">
-        <TooltipProvider>
-          <Toaster theme="dark" />
-          <Router />
-        </TooltipProvider>
-      </ThemeProvider>
-    </ErrorBoundary>
-  );
-}
-
-
-
-==============================================================================
-ARQUIVO: client/src/pages/Home.tsx
-==============================================================================
-
-import { useState } from "react";
-import {
-  Activity,
-  Archive,
-  Check,
-  ChevronRight,
-  Clock3,
-  Copy,
-  Download,
-  ExternalLink,
-  FileCode2,
-  FolderGit2,
-  Ghost,
-  Monitor,
-  Smartphone,
-  Terminal,
-  Youtube,
-} from "lucide-react";
-
-const YOUTUBE_URL = "https://youtube.com/@ghost.scripts.01";
-type Tab = "executores" | "projetos" | "scripts" | "antigos";
-
-type Item = {
-  id: string;
-  name: string;
-  game: string;
-  version: string;
-  status: "funcionando" | "beta" | "instável" | "fora do ar" | "sem evidência" | "open source";
-  description: string;
-  tags: string[];
-  platform: string;
-  updated: string;
-  image?: string;
-  code?: string;
-  url?: string;
-  tab: Exclude<Tab, "executores">;
-  page: number;
-};
-
-const executors: Item[] = [
-  { id: "delta", name: "Delta", game: "Executor", version: "Level 7", status: "instável", description: "Há atividade pública recente, mas também relatos de falhas no iOS e servidores possivelmente indisponíveis.", tags: ["Level 7", "Free", "Windows", "Instável"], platform: "Android / iOS / PC", updated: "instável", image: "https://img.youtube.com/vi/IIJhf57HxSU/maxresdefault.jpg", url: "https://deltaexector.com", tab: "projetos", page: 1 },
-  { id: "arceus", name: "Arceus X", game: "Executor", version: "V5 / NEO", status: "funcionando", description: "Presença pública recente e versões anunciadas para Android e iOS, com possíveis bugs e instabilidade.", tags: ["V5", "NEO", "Android", "iOS"], platform: "Android / iOS", updated: "verificado recentemente", image: "https://img.youtube.com/vi/UptOwedsDRk/maxresdefault.jpg", url: "https://arceusx.com", tab: "projetos", page: 1 },
-  { id: "codex", name: "Codex", game: "Executor", version: "Android 2.731", status: "fora do ar", description: "Fonte independente relata que está fora do ar, aguardando atualização para o patch mais recente do Roblox.", tags: ["Android", "Detectado", "Aguardando update"], platform: "Android", updated: "fora do ar", image: "https://img.youtube.com/vi/ETeTClOfqc0/maxresdefault.jpg", url: "https://codex.lol", tab: "projetos", page: 1 },
-  { id: "lime", name: "Lime", game: "Executor", version: "2.738.1397", status: "funcionando", description: "Página pública declara versão compatível com Roblox 2.738.1397 para Android 9+ ARM64, sem suporte a iOS.", tags: ["100% sUNC", "Keyless", "Android 9+", "arm64"], platform: "Android 9+", updated: "atualizado em setembro", image: "https://img.youtube.com/vi/YzQo7uKKi20/maxresdefault.jpg", url: "https://getlime.app", tab: "projetos", page: 1 },
-  { id: "vega", name: "Vega X", game: "Executor", version: "2.734.917", status: "fora do ar", description: "Fonte independente indica que está desatualizado para o build atual do Roblox e não funciona até nova atualização.", tags: ["Android", "Detectado", "Desatualizado"], platform: "Android", updated: "fora do ar", image: "https://img.youtube.com/vi/mxhA5LGJqnY/maxresdefault.jpg", url: "https://vegax.dev", tab: "projetos", page: 1 },
-  { id: "xeno", name: "Xeno", game: "Executor", version: "PC", status: "instável", description: "Site público ativo, mas há relatos recentes de bugs e interrupções após atualizações do Roblox.", tags: ["Windows", "PC", "Instável"], platform: "Windows PC", updated: "instável", url: "https://www.xeno.now", tab: "projetos", page: 1 },
-  { id: "wave", name: "Wave", game: "Executor", version: "Windows", status: "funcionando", description: "Site público ativo e cliente para Windows disponível; a estabilidade pode variar após atualizações.", tags: ["Windows", "PC", "Atualizações"], platform: "Windows PC", updated: "disponível", url: "https://www.getwave.gg", tab: "projetos", page: 1 },
-  { id: "solara", name: "Solara", game: "Executor", version: "v0.1.7", status: "funcionando", description: "Página pública ativa com versão v0.1.7 e suporte declarado para Windows 10/11.", tags: ["Windows 10/11", "PC", "64-bit"], platform: "Windows PC", updated: "disponível", url: "https://getsolara.dev", tab: "projetos", page: 1 },
-  { id: "velocity", name: "Velocity", game: "Executor", version: "1.3.9", status: "fora do ar", description: "Marcado como offline e desatualizado para o build atual do Roblox, aguardando nova atualização.", tags: ["Windows", "PC", "Desatualizado", "Detectado"], platform: "Windows PC", updated: "fora do ar", url: "https://executors.online/docs/executors/velocity", tab: "projetos", page: 1 },
-];
-
-const scripts: Item[] = [
-  { id: "ghost-hub", name: "Ghost Hub", game: "Hospital de Animais", version: "v1.0", status: "funcionando", description: "Script completo para Hospital de Animais. Otimizado e pronto pra usar.", tags: ["Auto Farm", "Sem Key", "Hospital de Animais"], platform: "PC + Mobile", updated: "há 2 dias", image: "https://img.youtube.com/vi/IIJhf57HxSU/maxresdefault.jpg", code: 'loadstring(game:HttpGet("https://raw.githubusercontent.com/ghosthub031-dev/Jdjtifgijtut/refs/heads/main/deepseek_lua_20260908_27a5b8%20(3).lua"))()', tab: "projetos", page: 1 },
-  { id: "ghost-rivals", name: "Ghost Scripts", game: "Rivals", version: "v2.0", status: "funcionando", description: "Script para Rivals. Estável, sem key e com FPS boost.", tags: ["FE-Safe", "Sem Key", "Auto-Update", "Mobile", "FPS Boost"], platform: "PC + Mobile", updated: "há 3 dias", image: "https://img.youtube.com/vi/UptOwedsDRk/maxresdefault.jpg", code: 'loadstring(game:HttpGet("https://raw.githubusercontent.com/ghosthub031-dev/Ghost-rivals/refs/heads/main/obfuscated_script-1789434997130.lua.txt"))()', tab: "projetos", page: 1 },
-  { id: "ghost-fps", name: "Ghost Hub", game: "FPS Passeio", version: "v2.5", status: "funcionando", description: "Hub para FPS Passeio. Aimbot, ESP, no recoil e mais. Atualizado para v2.5.", tags: ["Aimbot", "Wallhack", "ESP", "No Recoil", "FPS Boost"], platform: "PC + Mobile", updated: "há 3 dias", image: "https://img.youtube.com/vi/YzQo7uKKi20/maxresdefault.jpg", code: 'loadstring(game:HttpGet("https://raw.githubusercontent.com/ghosthub031-dev/Ghost-Scripts-FPS-passeio-/refs/heads/main/obfuscated_script-1789516643557.lua.txt"))()', tab: "projetos", page: 1 },
-  { id: "ghost-kaitun", name: "GHOST kaitun", game: "Blox Fruits", version: "v0.2 beta", status: "beta", description: "Kaitun completo para Blox Fruits. Auto farm, auto raid, auto sea 2/3, farm de itens e mais.", tags: ["Auto Farm", "Auto Raid", "Auto Sea 2/3", "Farm Itens", "Sem Key"], platform: "PC + Mobile", updated: "há 4 dias", image: "https://img.youtube.com/vi/vMeT83vzptc/maxresdefault.jpg", code: 'loadstring(game:HttpGet("https://raw.githubusercontent.com/ghosthub031-dev/Ghost-Scripts-kaitun-beta/refs/heads/main/Ghost%20Scripts"))()', tab: "projetos", page: 1 },
-  { id: "arsenal", name: "Ghost Scripts V1", game: "Arsenal", version: "v1.0 beta", status: "beta", description: "Script completo para Arsenal. Features avançadas, otimizado e sem key.", tags: ["Auto Farm", "Sem Key", "Arsenal"], platform: "PC + Mobile", updated: "há 5 dias", image: "https://img.youtube.com/vi/f4Fg2vqEb7c/maxresdefault.jpg", code: 'loadstring(game:HttpGet("https://raw.githubusercontent.com/ghosthub031-dev/Arcenal-ghost-Scripts-v1-beta-/refs/heads/main/obfuscated_script-1789412003510.lua.txt"))()', tab: "projetos", page: 2 },
-  { id: "egg-steal", name: "Ghost Hub", game: "Egg Steal", version: "v1.0", status: "funcionando", description: "Script completo para Egg Steal. Auto farm de ovos, teleporte e mais.", tags: ["Auto Farm", "Teleporte", "Sem Key"], platform: "PC + Mobile", updated: "há 5 dias", image: "https://img.youtube.com/vi/jQRMHEFKxAA/maxresdefault.jpg", code: 'loadstring(game:HttpGet("https://raw.githubusercontent.com/ghosthub031-dev/Kkk-roube-um-ovo/refs/heads/main/Roube%20um%20ovo%20para%20mim"))()', tab: "projetos", page: 2 },
-  { id: "w-azure", name: "W-azure", game: "Blox Fruits", version: "v1.0", status: "funcionando", description: "Script completo para Blox Fruits com auto farm, raids, boss, PvP e mais. Loader via Luarmor.", tags: ["Auto Farm", "Raid", "Boss", "PvP", "Silent Aim"], platform: "PC + Mobile", updated: "há 6 dias", image: "https://img.youtube.com/vi/1OmVz02Ul84/maxresdefault.jpg", code: 'getgenv().Team = "Pirates"\ngetgenv().SlowLoadUi = false\ngetgenv().FixCrash = true\ngetgenv().FixCrash2 = true\ngetgenv().ForceUseSilentAim = false\ngetgenv().AutoLoad = true\nloadstring(game:HttpGet("https://api.luarmor.net/files/v4/loaders/93db9b315179221830e07706f0e2c59a.lua"))()', tab: "scripts", page: 1 },
-  { id: "community-kaitun", name: "GHOST kaitun", game: "Blox Fruits", version: "v0.2 beta", status: "beta", description: "Kaitun completo para Blox Fruits. Auto farm, auto raid, auto sea 2/3, farm de itens e mais.", tags: ["Auto Farm", "Auto Raid", "Auto Sea 2/3", "Farm Itens"], platform: "PC + Mobile", updated: "há 6 dias", image: "https://img.youtube.com/vi/vMeT83vzptc/maxresdefault.jpg", code: 'loadstring(game:HttpGet("https://raw.githubusercontent.com/ghosthub031-dev/Ghost-Scripts-kaitun-beta/refs/heads/main/Ghost%20Scripts"))()', tab: "scripts", page: 1 },
-  ...([ ["quantum-onyx", "Quantum Onyx Hub", "https://img.youtube.com/vi/ETeTClOfqc0/maxresdefault.jpg", 'loadstring(game:HttpGet("https://raw.githubusercontent.com/flazhy/QuantumOnyx/refs/heads/main/QuantumOnyx.lua"))()'], ["lavz", "LAVZ Hub", "https://img.youtube.com/vi/mxhA5LGJqnY/maxresdefault.jpg", 'loadstring(game:HttpGet("https://raw.githubusercontent.com/bloxfruitsnokey/Redz-Hub/refs/heads/main/Lavz/script.luau"))()'], ["comet", "Comet Hub", "https://img.youtube.com/vi/9y313NnJq1U/maxresdefault.jpg", 'loadstring(game:HttpGet("https://raw.githubusercontent.com/bloxfruitsnokey/Stellar/refs/heads/main/Comet/script.luau"))()'], ["banana", "Banana Hub", "https://img.youtube.com/vi/ORFZZc65Ivk/maxresdefault.jpg", 'loadstring(game:HttpGet("https://raw.githubusercontent.com/x2RunE/Immortal/refs/heads/main/BananaCat-Loader.lua"))()'], ["teddy", "Teddy Hub", "https://img.youtube.com/vi/Y8pU18DftjM/maxresdefault.jpg", 'loadstring(game:HttpGet("https://raw.githubusercontent.com/teddyhubdev/diepvy/refs/heads/main/TeddyHub.lua"))()'], ["tsuo", "Tsuo Hub", "https://img.youtube.com/vi/qXIJIuUuUCQ/maxresdefault.jpg", 'loadstring(game:HttpGet("https://raw.githubusercontent.com/Tsuo7/TsuoHub/main/bloxfruits"))()'] ] as [string, string, string, string][]).map(([id, name, image, code]) => ({ id, name, game: "Blox Fruits", version: "v1.0", status: "funcionando" as const, description: "Hub completo para Blox Fruits com auto farm, raids, boss e mais.", tags: ["Auto Farm", "Raid", "Boss", "Sem Key"], platform: "PC + Mobile", updated: "há 1 semana", image, code, tab: "scripts" as const, page: 2 })),
-  { id: "gravity", name: "Gravity Hub", game: "Blox Fruits", version: "v1.0", status: "funcionando", description: "Hub completo para Blox Fruits com auto farm, raids, boss, PvP e configurações personalizáveis.", tags: ["Auto Farm", "Raid", "Boss", "PvP", "Sem Key"], platform: "PC + Mobile", updated: "há 1 semana", image: "https://img.youtube.com/vi/dE374M93550/maxresdefault.jpg", code: 'GravityHub = {\n  Key = "",\n  Team = "Pirates",\n  Color = "Red",\n  SaveSetting = false,\n  AutoExecute = false\n}\nloadstring(game:HttpGet("https://raw.githubusercontent.com/Dev-GravityHub/BloxFruit/refs/heads/main/MainPremium.lua"))()', tab: "scripts", page: 3 },
-  { id: "legacy", name: "GHOST kaitun v1", game: "Blox Fruits", version: "v1.0 open source", status: "open source", description: "Projeto antigo do kaitun para Blox Fruits, liberado open source.", tags: ["Open Source", "Auto Farm", "Sem Key", "Blox Fruits"], platform: "PC + Mobile", updated: "arquivo", image: "https://img.youtube.com/vi/vMeT83vzptc/maxresdefault.jpg", code: 'loadstring(game:HttpGet("https://raw.githubusercontent.com/ghosthub031-dev/Ghost-Scripts-opem-Source-/refs/heads/main/ghost_kaitun_v1_opem.soure_projeto.txt"))()', tab: "antigos", page: 1 },
-];
-
-const tabItems: { id: Tab; label: string; icon: typeof Terminal }[] = [
-  { id: "executores", label: "executores", icon: Terminal },
-  { id: "projetos", label: "projetos", icon: FolderGit2 },
-  { id: "scripts", label: "scripts", icon: FileCode2 },
-  { id: "antigos", label: "projetos antigos", icon: Archive },
-];
-
-const statusLabel = (status: Item["status"]) => status === "funcionando" ? "funcionando" : status === "fora do ar" ? "fora do ar" : status === "instável" ? "instável" : status === "sem evidência" ? "sem evidência" : status === "open source" ? "open source" : "beta";
-
-export default function Home() {
-  const [activeTab, setActiveTab] = useState<Tab>("executores");
-  const [executorPlatform, setExecutorPlatform] = useState<"todos" | "mobile" | "pc">("todos");
-  const [pages, setPages] = useState<Record<Tab, number>>({ executores: 1, projetos: 1, scripts: 1, antigos: 1 });
-  const [copied, setCopied] = useState<string | null>(null);
-  const [toast, setToast] = useState("");
-  const currentPage = pages[activeTab];
-  const visible = activeTab === "executores"
-    ? executors.filter((item) => executorPlatform === "todos" || (executorPlatform === "pc" ? item.platform.includes("PC") : !item.platform.includes("PC")))
-    : scripts.filter((item) => item.tab === activeTab && item.page === currentPage);
-
-  const changeTab = (tab: Tab) => { setActiveTab(tab); setPages((previous) => ({ ...previous, [tab]: 1 })); if (tab !== "executores") setExecutorPlatform("todos"); };
-  const changePage = (page: number) => setPages((previous) => ({ ...previous, [activeTab]: page }));
-  const showToast = (message: string) => { setToast(message); window.setTimeout(() => setToast(""), 2200); };
-
-  async function copyItem(item: Item) {
-    if (!item.code) return;
-    try { await navigator.clipboard.writeText(item.code); setCopied(item.id); showToast("script copiado!"); window.setTimeout(() => setCopied(null), 2000); } catch { showToast("não foi possível copiar"); }
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GHOST SCRIPTS — Executores & Scripts Roblox</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg: #14161b;
+    --bg-raised: #1b1e25;
+    --bg-tab: #101217;
+    --line: #2a2e37;
+    --text: #e8e6e1;
+    --text-dim: #9299a6;
+    --text-faint: #5c626e;
+    --accent-purple: #b392f0;
+    --accent-green: #7ee787;
+    --accent-blue: #6cb6ff;
+    --accent-amber: #ffcb6b;
+    --accent-red: #f28b82;
   }
-  function downloadItem(item: Item) {
-    if (!item.code) return;
-    const url = URL.createObjectURL(new Blob([item.code], { type: "text/plain" }));
-    const anchor = document.createElement("a"); anchor.href = url; anchor.download = `${item.id}.lua`; anchor.click(); URL.revokeObjectURL(url); showToast("arquivo baixado!");
+  *{box-sizing:border-box; margin:0; padding:0;}
+  html{scroll-behavior:smooth;}
+  body{
+    background:var(--bg);
+    color:var(--text);
+    font-family:'IBM Plex Sans', system-ui, sans-serif;
+    min-height:100vh;
+    line-height:1.5;
   }
 
-  return <div className="site-shell"><div className="ambient ambient-one" /><div className="ambient ambient-two" />
-    <header className="topbar"><a className="brand" href="#top"><span className="brand-mark"><Ghost size={24} /></span><span className="brand-copy"><strong>GHOST</strong><em>SCRIPTS</em><small>scripts e hubs para Roblox</small></span></a><div className="top-actions"><a className="top-link" href={YOUTUBE_URL} target="_blank" rel="noreferrer"><Youtube size={16} /> YouTube <ExternalLink size={13} /></a><a className="top-button" href="#catalogo"><Terminal size={16} /> Ver projetos</a></div></header>
-    <main className="page-content" id="top"><section className="hero-row"><div className="hero-copy"><div className="prompt-line"><span>~/ghost-scripts</span> $ load roblox_tools <i /></div><h1>GHOST <span>SCRIPTS</span></h1><p>Executores e scripts Lua para Roblox. Tudo testado, atualizado e pronto pra usar.</p><div className="hero-meta"><span><Check size={14} /> atualizações frequentes</span><span><FileCode2 size={14} /> catálogo organizado</span></div></div><div className="server-status"><span className="pulse-dot" /><div><small>STATUS DO SERVIDOR</small><strong>ONLINE</strong></div><Activity size={18} /></div></section>
-      <section className="terminal-window" id="catalogo"><nav className="tabbar" aria-label="Navegação principal">{tabItems.map(({ id, label, icon: Icon }) => <button key={id} className={`tab ${activeTab === id ? "active" : ""}`} onClick={() => changeTab(id)}><Icon size={16} /><span>{label}</span><small>.lua</small></button>)}</nav><div className="panel-head"><div><p className="eyebrow"><span>//</span> {activeTab === "executores" ? "executores disponíveis" : activeTab === "projetos" ? "meus projetos" : activeTab === "scripts" ? "scripts da comunidade" : "projetos antigos (open source)"}</p><h2>{activeTab === "executores" ? "Executores disponíveis" : activeTab === "projetos" ? "Meus projetos" : activeTab === "scripts" ? "Scripts da comunidade" : "Arquivo open source"}</h2></div><span className="result-count">{activeTab === "executores" ? `${String(visible.length).padStart(2, "0")}` : String(visible.length).padStart(2, "0")} itens</span></div>
-        {activeTab === "executores" && <div className="executor-filters" role="tablist" aria-label="Filtrar executores por plataforma"><button className={executorPlatform === "todos" ? "executor-filter active" : "executor-filter"} onClick={() => setExecutorPlatform("todos")}>Todos <span>09</span></button><button className={executorPlatform === "mobile" ? "executor-filter active" : "executor-filter"} onClick={() => setExecutorPlatform("mobile")}><Smartphone size={14} /> Mobile <span>04</span></button><button className={executorPlatform === "pc" ? "executor-filter active" : "executor-filter"} onClick={() => setExecutorPlatform("pc")}><Monitor size={14} /> PC <span>05</span></button></div>}
-        {activeTab !== "executores" && <div className="sub-tabbar">{Array.from({ length: activeTab === "projetos" ? 2 : activeTab === "scripts" ? 3 : 1 }, (_, index) => index + 1).map((page) => <button key={page} className={`sub-tab ${currentPage === page ? "active" : ""}`} onClick={() => changePage(page)}><span className="sub-dot" /> página {page}</button>)}</div>}
-        <div className={activeTab === "executores" ? "executor-grid" : "script-list"}>{activeTab === "executores" ? visible.map((item) => <ExecutorCard key={item.id} item={item} onCopy={copyItem} copied={copied === item.id} />) : visible.map((item) => <ScriptCard key={item.id} item={item} onCopy={copyItem} onDownload={downloadItem} copied={copied === item.id} />)}</div>
-      </section><section className="bottom-rail"><div><span className="rail-icon"><Clock3 size={17} /></span><p><strong>Conteúdo acompanhado</strong><small>status e versões visíveis em cada card</small></p></div><div><span className="rail-icon"><FileCode2 size={17} /></span><p><strong>Catálogo organizado</strong><small>projetos, comunidade e arquivo</small></p></div><a href={YOUTUBE_URL} target="_blank" rel="noreferrer"><span className="rail-icon rail-youtube"><Youtube size={17} /></span><p><strong>Veja no YouTube</strong><small>tutoriais, testes e novidades</small></p><ChevronRight size={17} /></a></section></main>
-    <footer className="footer"><div className="footer-brand"><span className="brand-mark small"><Ghost size={17} /></span><span><strong>GHOST SCRIPTS</strong><small>scripts e hubs para Roblox</small></span></div><span>feito para a comunidade <span className="footer-accent">◆</span></span><span>© 2026</span></footer>{toast && <div className="toast"><Check size={15} /> {toast}</div>}
-  </div>;
-}
+  .wrap{max-width:920px; margin:0 auto; padding:48px 24px 80px;}
 
-function Status({ item }: { item: Item }) { return <span className={`status status-${item.status.replaceAll(" ", "-")}`}><span />{statusLabel(item.status)}</span>; }
+  header.hero{margin-bottom:40px;}
+  .prompt-line{
+    font-family:'IBM Plex Mono', monospace;
+    color:var(--accent-green);
+    font-size:14px;
+    margin-bottom:14px;
+    display:flex; gap:8px; align-items:center;
+  }
+  .prompt-line .caret{
+    display:inline-block; width:8px; height:16px; background:var(--accent-green);
+    animation:blink 1.1s steps(1) infinite;
+  }
+  @keyframes blink{50%{opacity:0;}}
+  h1{
+    font-family:'IBM Plex Mono', monospace;
+    font-weight:700;
+    font-size:clamp(28px, 5vw, 44px);
+    letter-spacing:-0.01em;
+    color:var(--text);
+  }
+  h1 span{color:var(--text-faint);}
+  .subtitle{
+    color:var(--text-dim);
+    font-size:15px;
+    margin-top:10px;
+    max-width:520px;
+  }
 
-function ExecutorCard({ item, onCopy, copied }: { item: Item; onCopy: (item: Item) => void; copied: boolean }) {
-  return <article className="executor-card"><div className="executor-top"><div><span className="executor-kicker"><Terminal size={13} /> executor</span><h3>{item.name}</h3></div><Status item={item} /></div><p>{item.description}</p><div className="card-info"><span>{item.platform.includes("Mobile") ? <Smartphone size={13} /> : <Monitor size={13} />} {item.platform}</span><span className={item.updated.includes("aguardando") || item.updated.includes("instável") ? "risk-info" : ""}><Clock3 size={13} /> {item.updated}</span></div><div className="tags">{item.tags.map((tag) => <span key={tag} className={tag === "Detectado" ? "risk-tag" : ""}>{tag}</span>)}</div><div className="card-actions"><button className="primary-action" onClick={() => onCopy(item)}>{copied ? <Check size={15} /> : <Copy size={15} />}{copied ? "copiado" : "ver instruções"}</button><a className="secondary-action" href={item.url} target="_blank" rel="noreferrer"><ExternalLink size={15} /> baixar {item.name}</a></div></article>;
-}
+  .tabbar{
+    display:flex;
+    background:var(--bg-tab);
+    border:1px solid var(--line);
+    border-bottom:none;
+    border-radius:10px 10px 0 0;
+    overflow:hidden;
+    overflow-x:auto;
+  }
+  .tab{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:13.5px;
+    color:var(--text-faint);
+    padding:14px 20px;
+    display:flex; align-items:center; gap:9px;
+    cursor:pointer;
+    border-right:1px solid var(--line);
+    background:transparent;
+    border-top:2px solid transparent;
+    border-bottom:none;
+    transition:color .15s, background .15s;
+    white-space:nowrap;
+    flex-shrink:0;
+  }
+  .tab:hover{color:var(--text-dim);}
+  .tab.active{
+    color:var(--text);
+    background:var(--bg);
+    border-top:2px solid var(--accent-purple);
+  }
+  .tab .dot{width:7px; height:7px; border-radius:50%; background:var(--text-faint); flex-shrink:0;}
+  .tab.active .dot{background:var(--accent-green);}
+  .tab .ext{color:var(--text-faint); font-size:12px;}
 
-function ScriptCard({ item, onCopy, onDownload, copied }: { item: Item; onCopy: (item: Item) => void; onDownload: (item: Item) => void; copied: boolean }) {
-  return <article className="script-card">{item.image && <div className="card-image"><img src={item.image} alt={item.name} loading="lazy" /><Status item={item} /><span className="game-label">{item.game}</span></div>}<div className="script-header"><div className="game-badge">{item.game}</div>{!item.image && <Status item={item} />}</div><div className="script-title-row"><div><h3>{item.name}</h3><span className="version">{item.version}</span></div><span className="platform">{item.platform.includes("Mobile") ? <Smartphone size={13} /> : <Monitor size={13} />}{item.platform}</span></div><p className="card-description">{item.description}</p><div className="code-block"><code>{item.code}</code></div><div className="card-actions"><button className="primary-action" onClick={() => onCopy(item)}>{copied ? <Check size={15} /> : <Copy size={15} />}{copied ? "copiado" : "copiar script"}</button><button className="secondary-action" onClick={() => onDownload(item)}><Download size={15} /> baixar .lua</button></div><div className="tags">{item.tags.map((tag) => <span key={tag}>{tag}</span>)}</div></article>;
-}
+  .panel{
+    border:1px solid var(--line);
+    border-radius:0 0 10px 10px;
+    background:var(--bg);
+    padding:32px 28px;
+  }
+  .panel-section{display:none;}
+  .panel-section.active{display:block; animation:fadein .25s ease;}
+  @keyframes fadein{from{opacity:0; transform:translateY(4px);} to{opacity:1; transform:translateY(0);}}
 
+  .section-label{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:12px;
+    color:var(--text-faint);
+    text-transform:uppercase;
+    letter-spacing:.08em;
+    margin-bottom:18px;
+  }
 
+  .app-grid{display:grid; grid-template-columns:1fr 1fr; gap:16px;}
+  @media (max-width:640px){.app-grid{grid-template-columns:1fr;}}
+  .app-card{
+    background:var(--bg-raised);
+    border:1px solid var(--line);
+    border-radius:8px;
+    padding:20px;
+    transition:border-color .15s, transform .15s;
+  }
+  .app-card:hover{border-color:var(--accent-purple); transform:translateY(-2px);}
+  .app-card-top{display:flex; justify-content:space-between; align-items:start; gap:10px; margin-bottom:8px;}
+  .app-name{font-family:'IBM Plex Mono', monospace; font-weight:600; font-size:15px;}
+  .status{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:10.5px;
+    padding:3px 8px;
+    border-radius:20px;
+    white-space:nowrap;
+  }
+  .status.live{color:var(--accent-green); background:rgba(126,231,135,.1);}
+  .status.beta{color:var(--accent-amber); background:rgba(255,203,106,.1);}
+  .status.patched{color:var(--accent-red); background:rgba(242,139,130,.1);}
+  .status.unstable{color:var(--accent-amber); background:rgba(255,203,106,.1);}
+  .app-desc{color:var(--text-dim); font-size:13.5px; margin-bottom:14px;}
+  .tags{display:flex; flex-wrap:wrap; gap:6px;}
+  .tag{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:11px;
+    color:var(--accent-blue);
+    background:rgba(108,182,255,.08);
+    padding:3px 8px;
+    border-radius:4px;
+  }
 
-==============================================================================
-ARQUIVO: client/src/pages/NotFound.tsx
-==============================================================================
+  .script-card{
+    background:var(--bg-raised);
+    border:1px solid var(--line);
+    border-radius:8px;
+    padding:24px;
+    transition:border-color .15s, transform .15s;
+    margin-bottom:16px;
+  }
+  .script-card:last-child{margin-bottom:0;}
+  .script-card:hover{border-color:var(--accent-purple); transform:translateY(-2px);}
+  .game-badge{
+    display:inline-flex;
+    align-items:center;
+    gap:6px;
+    font-family:'IBM Plex Mono', monospace;
+    font-size:11px;
+    color:var(--accent-amber);
+    background:rgba(255,203,106,.1);
+    padding:4px 12px;
+    border-radius:20px;
+    margin-bottom:12px;
+  }
 
-import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
-import { AlertCircle, Home } from "lucide-react";
-import { useLocation } from "wouter";
+  .script-name{
+    font-family:'IBM Plex Mono', monospace;
+    font-weight:700;
+    font-size:18px;
+    color:var(--text);
+  }
+  .script-ver{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:12px;
+    color:var(--accent-purple);
+    background:rgba(179,146,240,.1);
+    padding:3px 10px;
+    border-radius:20px;
+  }
+  .script-desc{color:var(--text-dim); font-size:14px; margin-bottom:16px;}
 
-export default function NotFound() {
-  const [, setLocation] = useLocation();
+  .code-block{
+    background:var(--bg-tab);
+    border:1px solid var(--line);
+    border-radius:6px;
+    padding:14px 16px;
+    font-family:'IBM Plex Mono', monospace;
+    font-size:12px;
+    overflow-x:auto;
+    line-height:1.6;
+    word-break:break-all;
+  }
 
-  const handleGoHome = () => {
-    setLocation("/");
-  };
+  .btn-row{
+    display:flex;
+    gap:8px;
+    margin-top:10px;
+    flex-wrap:wrap;
+  }
+  .copy-btn, .download-script-btn{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:11px;
+    color:var(--text-faint);
+    background:var(--bg-raised);
+    border:1px solid var(--line);
+    border-radius:4px;
+    padding:6px 14px;
+    cursor:pointer;
+    transition:all .15s;
+  }
+  .copy-btn:hover, .download-script-btn:hover{color:var(--text); border-color:var(--accent-purple);}
+  .copy-btn.copied{color:var(--accent-green); border-color:var(--accent-green);}
+  .download-script-btn:hover{color:var(--text); border-color:var(--accent-blue);}
+  .download-script-btn.downloaded{color:var(--accent-blue); border-color:var(--accent-blue);}
 
-  return (
-    <div className="min-h-screen w-full flex items-center justify-center bg-gradient-to-br from-slate-50 to-slate-100">
-      <Card className="w-full max-w-lg mx-4 shadow-lg border-0 bg-white/80 backdrop-blur-sm">
-        <CardContent className="pt-8 pb-8 text-center">
-          <div className="flex justify-center mb-6">
-            <div className="relative">
-              <div className="absolute inset-0 bg-red-100 rounded-full animate-pulse" />
-              <AlertCircle className="relative h-16 w-16 text-red-500" />
+  .download-btn{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:11px;
+    color:var(--text-faint);
+    background:var(--bg-raised);
+    border:1px solid var(--line);
+    border-radius:4px;
+    padding:6px 14px;
+    cursor:pointer;
+    margin-top:10px;
+    transition:all .15s;
+    text-decoration:none;
+    display:inline-block;
+  }
+  .download-btn:hover{color:var(--text); border-color:var(--accent-purple);}
+
+  .features{
+    display:flex;
+    flex-wrap:wrap;
+    gap:8px;
+    margin-top:14px;
+  }
+  .feature{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:11px;
+    color:var(--accent-green);
+    background:rgba(126,231,135,.08);
+    padding:4px 10px;
+    border-radius:4px;
+  }
+
+  .toast{
+    position:fixed;
+    bottom:24px;
+    left:50%;
+    transform:translateX(-50%) translateY(100px);
+    background:var(--bg-raised);
+    border:1px solid var(--accent-green);
+    color:var(--accent-green);
+    font-family:'IBM Plex Mono', monospace;
+    font-size:13px;
+    padding:10px 20px;
+    border-radius:6px;
+    opacity:0;
+    transition:all .3s ease;
+    z-index:1000;
+    pointer-events:none;
+  }
+  .toast.show{
+    transform:translateX(-50%) translateY(0);
+    opacity:1;
+  }
+
+  .social-links{
+    text-align:center;
+    margin-top:20px;
+    margin-bottom:10px;
+  }
+  .social-links a{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:13px;
+    color:#ff0000;
+    text-decoration:none;
+    background:rgba(255,0,0,.1);
+    padding:8px 16px;
+    border-radius:20px;
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+    transition:all .15s;
+  }
+  .social-links a:hover{
+    background:rgba(255,0,0,.2);
+    transform:translateY(-1px);
+  }
+
+  footer{
+    margin-top:32px;
+    font-family:'IBM Plex Mono', monospace;
+    font-size:12px;
+    color:var(--text-faint);
+    text-align:center;
+  }
+
+  .warning-box{
+    background:rgba(242,139,130,.08);
+    border:1px solid rgba(242,139,130,.25);
+    border-radius:6px;
+    padding:10px 14px;
+    margin-bottom:16px;
+    display:flex;
+    align-items:center;
+    gap:10px;
+    font-family:'IBM Plex Mono', monospace;
+    font-size:12px;
+    color:var(--accent-red);
+  }
+  .warning-box .icon{
+    font-size:16px;
+    flex-shrink:0;
+  }
+
+  .success-box{
+    background:rgba(126,231,135,.08);
+    border:1px solid rgba(126,231,135,.30);
+    border-radius:6px;
+    padding:10px 14px;
+    margin-bottom:16px;
+    display:flex;
+    align-items:center;
+    gap:10px;
+    font-family:'IBM Plex Mono', monospace;
+    font-size:12px;
+    color:var(--accent-green);
+  }
+  .success-box .icon{
+    font-size:16px;
+    flex-shrink:0;
+  }
+
+  .sub-tabbar{
+    display:flex;
+    gap:8px;
+    margin-bottom:20px;
+    flex-wrap:wrap;
+  }
+  .sub-tab{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:12px;
+    color:var(--text-faint);
+    padding:8px 16px;
+    border:1px solid var(--line);
+    border-radius:6px;
+    background:var(--bg-raised);
+    cursor:pointer;
+    display:flex; align-items:center; gap:8px;
+    transition:all .15s;
+  }
+  .sub-tab:hover{color:var(--text-dim); border-color:var(--accent-purple);}
+  .sub-tab.active{
+    color:var(--text);
+    border-color:var(--accent-purple);
+    background:rgba(179,146,240,.08);
+  }
+  .sub-tab .dot{width:6px; height:6px; border-radius:50%; background:var(--text-faint);}
+  .sub-tab.active .dot{background:var(--accent-green);}
+  .script-page{display:none;}
+  .script-page.active{display:block; animation:fadein .25s ease;}
+
+  .script-header{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    margin-bottom:10px;
+    flex-wrap:nowrap;
+  }
+  .script-thumb-small{
+    width:130px;
+    height:74px;
+    object-fit:cover;
+    border-radius:4px;
+    border:1px solid var(--line);
+    flex-shrink:0;
+  }
+  .script-header-text{
+    flex:1;
+    min-width:0;
+  }
+
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <header class="hero">
+      <div class="prompt-line">~/ghost-scripts $ load roblox_tools<span class="caret"></span></div>
+      <h1>GHOST<span> SCRIPTS</span></h1>
+      <p class="subtitle">Executores e scripts Lua para Roblox. Tudo testado, atualizado e pronto pra usar.</p>
+    </header>
+
+    <div class="tabbar">
+      <button class="tab active" data-tab="executores">
+        <span class="dot"></span> executores <span class="ext">.lua</span>
+      </button>
+      <button class="tab" data-tab="projetos">
+        <span class="dot"></span> projetos <span class="ext">.lua</span>
+      </button>
+      <button class="tab" data-tab="scripts">
+        <span class="dot"></span> scripts <span class="ext">.lua</span>
+      </button>
+      <button class="tab" data-tab="antigos">
+        <span class="dot"></span> projetos antigos <span class="ext">.lua</span>
+      </button>
+    </div>
+
+    <div class="panel">
+      <!-- EXECUTORES -->
+      <section class="panel-section active" id="executores">
+        <div class="section-label">// executores disponiveis</div>
+        <div class="app-grid">
+          <div class="app-card">
+            <div class="app-card-top">
+              <span class="app-name">Delta</span>
+              <span class="status unstable">instavel</span>
+            </div>
+            <p class="app-desc">Executor free com key system. Versao PC com instabilidade apos ultimo patch do Roblox. Mobile OK.</p>
+            <div class="tags"><span class="tag">Level 7</span><span class="tag">Free</span><span class="tag">Windows</span></div>
+            <a href="https://deltaexector.com" class="download-btn" target="_blank" rel="noopener">baixar delta</a>
+          </div>
+          <div class="app-card">
+            <div class="app-card-top">
+              <span class="app-name">Arceus X</span>
+              <span class="status live">funcionando</span>
+            </div>
+            <p class="app-desc">Executor mobile com duas versoes: V5 (premium com IA) e NEO Free (gratuita e leve). Android, iOS e VNG.</p>
+            <div class="tags"><span class="tag">Level 6</span><span class="tag">Free/Pago</span><span class="tag">Android</span><span class="tag">iOS</span></div>
+            <a href="https://arceusx.com" class="download-btn" target="_blank" rel="noopener">baixar arceus x</a>
+          </div>
+          <div class="app-card">
+            <div class="app-card-top">
+              <span class="app-name">Codex</span>
+              <span class="status patched">fora do ar</span>
+            </div>
+            <p class="app-desc">Executor com bypass de Byfron. Atualmente fora do ar e detectado pelo anti-cheat. Aguardando update.</p>
+            <div class="tags"><span class="tag">Level 8</span><span class="tag">Free</span><span class="tag">Windows</span><span class="tag">Detectado</span></div>
+            <a href="https://codex.lol" class="download-btn" target="_blank" rel="noopener">baixar codex</a>
+          </div>
+          <div class="app-card">
+            <div class="app-card-top">
+              <span class="app-name">Lime</span>
+              <span class="status live">funcionando</span>
+            </div>
+            <p class="app-desc">Executor Android free e sem key. 99% sUNC, interface flutuante com botao na tela.</p>
+            <div class="tags"><span class="tag">99% sUNC</span><span class="tag">Free</span><span class="tag">Android 9+</span><span class="tag">arm64</span></div>
+            <a href="https://getlime.app" class="download-btn" target="_blank" rel="noopener">baixar lime</a>
+          </div>
+          <div class="app-card">
+            <div class="app-card-top">
+              <span class="app-name">Vega X</span>
+              <span class="status patched">fora do ar</span>
+            </div>
+            <p class="app-desc">Executor Android com 98% sUNC. Fora do ar e detectado pelo anti-cheat. Aguardando update do patch.</p>
+            <div class="tags"><span class="tag">98% sUNC</span><span class="tag">Free</span><span class="tag">Android</span><span class="tag">Detectado</span></div>
+            <a href="https://vegax.dev" class="download-btn" target="_blank" rel="noopener">baixar vega x</a>
+          </div>
+        </div>
+      </section>
+
+      <!-- PROJETOS (seus scripts) -->
+            <section class="panel-section" id="projetos">
+        <div class="section-label">// meus projetos</div>
+
+        <div class="sub-tabbar" id="projetos-paginator">
+          <button class="sub-tab active" data-page="1">
+            <span class="dot"></span> pagina 1
+          </button>
+          <button class="sub-tab" data-page="2">
+            <span class="dot"></span> pagina 2
+          </button>
+        </div>
+
+        <div class="script-page active" data-page="1">
+  <div class="script-card">
+          <div class="game-badge">Hospital de Animais</div>
+          <div class="script-header">
+            <img class="script-thumb-small" src="https://img.youtube.com/vi/IIJhf57HxSU/maxresdefault.jpg" alt="Ghost Hub" loading="lazy">
+            <div class="script-header-text">
+              <span class="script-name">Ghost Hub</span>
+              <span class="script-ver">v1.0</span>
+            </div>
+          </div>
+            <p class="script-desc">Script completo para Hospital de Animais. Otimizado e pronto pra usar.</p>
+
+            <div class="code-block" id="code14">loadstring(game:HttpGet("https://raw.githubusercontent.com/ghosthub031-dev/Jdjtifgijtut/refs/heads/main/deepseek_lua_20260908_27a5b8%20(3).lua"))()</div>
+            <div class="btn-row">
+              <button class="copy-btn" data-target="code14" data-text="loadstring(game:HttpGet(&quot;https://raw.githubusercontent.com/ghosthub031-dev/Jdjtifgijtut/refs/heads/main/deepseek_lua_20260908_27a5b8%20(3).lua&quot;))()">copiar script</button>
+              <button class="download-script-btn" data-filename="ghost-hub-hospital-animais.lua" data-target="code14">baixar .lua</button>
+            </div>
+
+            <div class="features">
+              <span class="feature">Auto Farm</span>
+              <span class="feature">Sem Key</span>
+              <span class="feature">Hospital de Animais</span>
+            </div>
+          </div>
+  <div class="script-card">
+          <div class="game-badge">Rivals</div>
+          <div class="script-header">
+            <img class="script-thumb-small" src="https://img.youtube.com/vi/UptOwedsDRk/maxresdefault.jpg" alt="Ghost Scripts" loading="lazy">
+            <div class="script-header-text">
+              <span class="script-name">Ghost Scripts</span>
+              <span class="script-ver">v2.0 ✨</span>
+            </div>
+          </div>
+            <p class="script-desc">Script para Rivals. Estável, sem key e com FPS boost.</p>
+
+            <div class="success-box">
+              <span class="icon">✨</span>
+              <span>Risco de banimento resolvido com sucesso! FPS boost adicionado e entre outros.</span>
+            </div>
+
+            <div class="code-block" id="code4">loadstring(game:HttpGet("https://raw.githubusercontent.com/ghosthub031-dev/Ghost-rivals/refs/heads/main/obfuscated_script-1789434997130.lua.txt"))()</div>
+            <div class="btn-row">
+              <button class="copy-btn" data-target="code4" data-text="loadstring(game:HttpGet(&quot;https://raw.githubusercontent.com/ghosthub031-dev/Ghost-rivals/refs/heads/main/obfuscated_script-1789434997130.lua.txt&quot;))()">copiar script</button>
+              <button class="download-script-btn" data-filename="ghost-scripts-rivals.lua" data-target="code4">baixar .lua</button>
+            </div>
+
+            <div class="features">
+              <span class="feature">FE-Safe</span>
+              <span class="feature">Sem Key</span>
+              <span class="feature">Auto-Update</span>
+              <span class="feature">Mobile</span>
+              <span class="feature">FPS Boost</span>
+              <span class="feature">Rivals</span>
+            </div>
+          </div>
+  <div class="script-card">
+          <div class="game-badge">FPS</div>
+          <div class="script-header">
+            <img class="script-thumb-small" src="https://img.youtube.com/vi/YzQo7uKKi20/maxresdefault.jpg" alt="Ghost Hub FPS Passeio" loading="lazy">
+            <div class="script-header-text">
+              <span class="script-name">Ghost Hub</span>
+              <span class="script-ver">v2.5 ✨</span>
+            </div>
+          </div>
+            <p class="script-desc">Hub para FPS Passeio. Aimbot, ESP, no recoil e mais. Atualizado para v2.5.</p>
+
+            <div class="success-box">
+              <span class="icon">✨</span>
+              <span>Novidades da v2.5: funcoes novas adicionadas e melhoria na aparencia do hub!</span>
+            </div>
+
+            <div class="code-block" id="code2">loadstring(game:HttpGet("https://raw.githubusercontent.com/ghosthub031-dev/Ghost-Scripts-FPS-passeio-/refs/heads/main/obfuscated_script-1789516643557.lua.txt"))()</div>
+            <div class="btn-row">
+              <button class="copy-btn" data-target="code2" data-text="loadstring(game:HttpGet(&quot;https://raw.githubusercontent.com/ghosthub031-dev/Ghost-Scripts-FPS-passeio-/refs/heads/main/obfuscated_script-1789516643557.lua.txt&quot;))()">copiar script</button>
+              <button class="download-script-btn" data-filename="ghost-hub-fps-passeio.lua" data-target="code2">baixar .lua</button>
+            </div>
+
+            <div class="features">
+              <span class="feature">Aimbot</span>
+              <span class="feature">Wallhack</span>
+              <span class="feature">ESP</span>
+              <span class="feature">No Recoil</span>
+              <span class="feature">Sem Key</span>
+              <span class="feature">v2.5</span>
+            </div>
+          </div>
+                                <div class="script-card">
+            <div class="game-badge">Blox Fruits</div>
+            <div class="script-header">
+              <img class="script-thumb-small" src="https://img.youtube.com/vi/vMeT83vzptc/maxresdefault.jpg" alt="GHOST kaitun" loading="lazy">
+              <div class="script-header-text">
+                <span class="script-name">GHOST kaitun</span>
+                <span class="script-ver">v0.2 beta ⚠️</span>
+              </div>
+            </div>
+            <p class="script-desc">Kaitun completo para Blox Fruits. Auto farm, auto raid, auto sea 2/3, farm de itens e mais.</p>
+            <div class="warning-box">
+              <span class="icon">🚧</span>
+              <span>Versão BETA — ainda em desenvolvimento! Bugs conhecidos: Fly, Auto Farm Level e Teleporte estão sendo trabalhados para serem resolvidos.</span>
+            </div>
+            <div class="code-block" id="code9">loadstring(game:HttpGet("https://raw.githubusercontent.com/ghosthub031-dev/Ghost-Scripts-kaitun-beta/refs/heads/main/Ghost%20Scripts"))()</div>
+            <div class="btn-row">
+              <button class="copy-btn" data-target="code9" data-text="loadstring(game:HttpGet(&quot;https://raw.githubusercontent.com/ghosthub031-dev/Ghost-Scripts-kaitun-beta/refs/heads/main/Ghost%20Scripts&quot;))()">copiar script</button>
+              <button class="download-script-btn" data-filename="ghost-kaitun.lua" data-target="code9">baixar .lua</button>
+            </div>
+            <div class="features">
+              <span class="feature">Auto Farm</span>
+              <span class="feature">Auto Raid</span>
+              <span class="feature">Auto Sea 2/3</span>
+              <span class="feature">Farm Itens</span>
+              <span class="feature">Sem Key</span>
             </div>
           </div>
 
-          <h1 className="text-4xl font-bold text-slate-900 mb-2">404</h1>
 
-          <h2 className="text-xl font-semibold text-slate-700 mb-4">
-            Page Not Found
-          </h2>
+        </div>
 
-          <p className="text-slate-600 mb-8 leading-relaxed">
-            Sorry, the page you are looking for doesn't exist.
-            <br />
-            It may have been moved or deleted.
-          </p>
-
-          <div className="flex flex-col sm:flex-row gap-3 justify-center">
-            <Button
-              onClick={handleGoHome}
-              className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2.5 rounded-lg transition-all duration-200 shadow-md hover:shadow-lg"
-            >
-              <Home className="w-4 h-4 mr-2" />
-              Go Home
-            </Button>
+        <div class="script-page" data-page="2">
+  <div class="script-card">
+          <div class="game-badge">Arsenal</div>
+          <div class="script-header">
+            <img class="script-thumb-small" src="https://img.youtube.com/vi/f4Fg2vqEb7c/maxresdefault.jpg" alt="Ghost Scripts V1" loading="lazy">
+            <div class="script-header-text">
+              <span class="script-name">Ghost Scripts V1</span>
+              <span class="script-ver">v1.0 beta ⚠️</span>
+            </div>
           </div>
-        </CardContent>
-      </Card>
+            <p class="script-desc">Script completo para Arsenal. Features avancadas, otimizado e sem key.</p>
+
+            <div class="code-block" id="code18">loadstring(game:HttpGet("https://raw.githubusercontent.com/ghosthub031-dev/Arcenal-ghost-Scripts-v1-beta-/refs/heads/main/obfuscated_script-1789412003510.lua.txt"))()</div>
+            <div class="btn-row">
+              <button class="copy-btn" data-target="code18" data-text="loadstring(game:HttpGet(&quot;https://raw.githubusercontent.com/ghosthub031-dev/Arcenal-ghost-Scripts-v1-beta-/refs/heads/main/obfuscated_script-1789412003510.lua.txt&quot;))()">copiar script</button>
+              <button class="download-script-btn" data-filename="ghost-scripts-v1-arsenal.lua" data-target="code18">baixar .lua</button>
+            </div>
+
+            <div class="features">
+              <span class="feature">Auto Farm</span>
+              <span class="feature">Sem Key</span>
+              <span class="feature">Arsenal</span>
+            </div>
+          </div>
+  <div class="script-card">
+          <div class="game-badge">Egg Steal</div>
+          <div class="script-header">
+            <img class="script-thumb-small" src="https://img.youtube.com/vi/jQRMHEFKxAA/maxresdefault.jpg" alt="Ghost Hub" loading="lazy">
+            <div class="script-header-text">
+              <span class="script-name">Ghost Hub</span>
+              <span class="script-ver">v1.0</span>
+            </div>
+          </div>
+            <p class="script-desc">Script completo para Egg Steal. Auto farm de ovos, teleporte e mais.</p>
+
+            <div class="code-block" id="code11">loadstring(game:HttpGet("https://raw.githubusercontent.com/ghosthub031-dev/Kkk-roube-um-ovo/refs/heads/main/Roube%20um%20ovo%20para%20mim"))()</div>
+            <div class="btn-row">
+              <button class="copy-btn" data-target="code11" data-text="loadstring(game:HttpGet(&quot;https://raw.githubusercontent.com/ghosthub031-dev/Kkk-roube-um-ovo/refs/heads/main/Roube%20um%20ovo%20para%20mim&quot;))()">copiar script</button>
+              <button class="download-script-btn" data-filename="ghost-hub-egg-steal.lua" data-target="code11">baixar .lua</button>
+            </div>
+
+            <div class="features">
+              <span class="feature">Auto Farm</span>
+              <span class="feature">Teleporte</span>
+              <span class="feature">Sem Key</span>
+            </div>
+          </div>
+        </div>
+
+      </section>
+
+         <!-- SCRIPTS (de outras pessoas) -->
+            <section class="panel-section" id="scripts">
+        <div class="section-label">// scripts da comunidade</div>
+
+        <div class="sub-tabbar" id="scripts-paginator">
+          <button class="sub-tab active" data-page="1">
+            <span class="dot"></span> pagina 1
+          </button>
+          <button class="sub-tab" data-page="2">
+            <span class="dot"></span> pagina 2
+          </button>
+          <button class="sub-tab" data-page="3">
+            <span class="dot"></span> pagina 3
+          </button>
+        </div>
+
+        <div class="script-page active" data-page="1">
+
+  <div class="script-card">
+          <div class="game-badge">Blox Fruits</div>
+          <div class="script-header">
+            <img class="script-thumb-small" src="https://img.youtube.com/vi/1OmVz02Ul84/maxresdefault.jpg" alt="W-azure" loading="lazy">
+            <div class="script-header-text">
+              <span class="script-name">W-azure</span>
+              <span class="script-ver">v1.0</span>
+            </div>
+          </div>
+            <p class="script-desc">Script completo para Blox Fruits com auto farm, raids, boss, PvP e mais. Loader via Luarmor.</p>
+  
+            <div class="code-block" id="code10">getgenv().Team = "Pirates"
+  getgenv().SlowLoadUi = false
+  getgenv().FixCrash = true
+  getgenv().FixCrash2 = true
+  getgenv().ForceUseSilentAim = false
+  getgenv().AutoLoad = true
+  loadstring(game:HttpGet("https://api.luarmor.net/files/v4/loaders/93db9b315179221830e07706f0e2c59a.lua"))()</div>
+            <div class="btn-row">
+              <button class="copy-btn" data-target="code10" data-text="getgenv().Team = &quot;Pirates&quot;
+  getgenv().SlowLoadUi = false
+  getgenv().FixCrash = true
+  getgenv().FixCrash2 = true
+  getgenv().ForceUseSilentAim = false
+  getgenv().AutoLoad = true
+  loadstring(game:HttpGet(&quot;https://api.luarmor.net/files/v4/loaders/93db9b315179221830e07706f0e2c59a.lua&quot;))()">copiar script</button>
+              <button class="download-script-btn" data-filename="w-azure-blox-fruits.lua" data-target="code10">baixar .lua</button>
+            </div>
+  
+            <div class="features">
+              <span class="feature">Auto Farm</span>
+              <span class="feature">Raid</span>
+              <span class="feature">Boss</span>
+              <span class="feature">PvP</span>
+              <span class="feature">Silent Aim</span>
+            </div>
+          </div>
+                                <div class="script-card">
+            <div class="game-badge">Blox Fruits</div>
+            <div class="script-header">
+              <img class="script-thumb-small" src="https://img.youtube.com/vi/vMeT83vzptc/maxresdefault.jpg" alt="GHOST kaitun" loading="lazy">
+              <div class="script-header-text">
+                <span class="script-name">GHOST kaitun</span>
+                <span class="script-ver">v0.2 beta ⚠️</span>
+              </div>
+            </div>
+            <p class="script-desc">Kaitun completo para Blox Fruits. Auto farm, auto raid, auto sea 2/3, farm de itens e mais.</p>
+            <div class="warning-box">
+              <span class="icon">🚧</span>
+              <span>Versão BETA — ainda em desenvolvimento! Bugs conhecidos: Fly, Auto Farm Level e Teleporte estão sendo trabalhados para serem resolvidos.</span>
+            </div>
+            <div class="code-block" id="code9">loadstring(game:HttpGet("https://raw.githubusercontent.com/ghosthub031-dev/Ghost-Scripts-kaitun-beta/refs/heads/main/Ghost%20Scripts"))()</div>
+            <div class="btn-row">
+              <button class="copy-btn" data-target="code9" data-text="loadstring(game:HttpGet(&quot;https://raw.githubusercontent.com/ghosthub031-dev/Ghost-Scripts-kaitun-beta/refs/heads/main/Ghost%20Scripts&quot;))()">copiar script</button>
+              <button class="download-script-btn" data-filename="ghost-kaitun.lua" data-target="code9">baixar .lua</button>
+            </div>
+            <div class="features">
+              <span class="feature">Auto Farm</span>
+              <span class="feature">Auto Raid</span>
+              <span class="feature">Auto Sea 2/3</span>
+              <span class="feature">Farm Itens</span>
+              <span class="feature">Sem Key</span>
+            </div>
+          </div>
+
+
+  <div class="script-card">
+          <div class="game-badge">Blox Fruits</div>
+          <div class="script-header">
+            <img class="script-thumb-small" src="https://img.youtube.com/vi/ETeTClOfqc0/maxresdefault.jpg" alt="Quantum Onyx Hub" loading="lazy">
+            <div class="script-header-text">
+              <span class="script-name">Quantum Onyx Hub</span>
+              <span class="script-ver">v1.0</span>
+            </div>
+          </div>
+            <p class="script-desc">Hub completo para Blox Fruits com auto farm, raids, boss e mais.</p>
+  
+            <div class="code-block" id="code7">loadstring(game:HttpGet("https://raw.githubusercontent.com/flazhy/QuantumOnyx/refs/heads/main/QuantumOnyx.lua"))()</div>
+            <div class="btn-row">
+              <button class="copy-btn" data-target="code7" data-text="loadstring(game:HttpGet(&quot;https://raw.githubusercontent.com/flazhy/QuantumOnyx/refs/heads/main/QuantumOnyx.lua&quot;))()">copiar script</button>
+              <button class="download-script-btn" data-filename="quantum-onyx-hub.lua" data-target="code7">baixar .lua</button>
+            </div>
+  
+            <div class="features">
+              <span class="feature">Auto Farm</span>
+              <span class="feature">Raid</span>
+              <span class="feature">Boss</span>
+              <span class="feature">Sem Key</span>
+            </div>
+          </div>
+  <div class="script-card">
+          <div class="game-badge">Blox Fruits</div>
+          <div class="script-header">
+            <img class="script-thumb-small" src="https://img.youtube.com/vi/mxhA5LGJqnY/maxresdefault.jpg" alt="LAVZ Hub" loading="lazy">
+            <div class="script-header-text">
+              <span class="script-name">LAVZ Hub</span>
+              <span class="script-ver">v1.0</span>
+            </div>
+          </div>
+            <p class="script-desc">Hub completo para Blox Fruits com auto farm, raids, boss e mais.</p>
+  
+            <div class="code-block" id="code6">loadstring(game:HttpGet("https://raw.githubusercontent.com/bloxfruitsnokey/Redz-Hub/refs/heads/main/Lavz/script.luau"))()</div>
+            <div class="btn-row">
+              <button class="copy-btn" data-target="code6" data-text="loadstring(game:HttpGet(&quot;https://raw.githubusercontent.com/bloxfruitsnokey/Redz-Hub/refs/heads/main/Lavz/script.luau&quot;))()">copiar script</button>
+              <button class="download-script-btn" data-filename="lavz-hub.lua" data-target="code6">baixar .lua</button>
+            </div>
+  
+            <div class="features">
+              <span class="feature">Auto Farm</span>
+              <span class="feature">Raid</span>
+              <span class="feature">Boss</span>
+              <span class="feature">Sem Key</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="script-page" data-page="2">
+  <div class="script-card">
+          <div class="game-badge">Blox Fruits</div>
+          <div class="script-header">
+            <img class="script-thumb-small" src="https://img.youtube.com/vi/9y313NnJq1U/maxresdefault.jpg" alt="Comet Hub" loading="lazy">
+            <div class="script-header-text">
+              <span class="script-name">Comet Hub</span>
+              <span class="script-ver">v1.0</span>
+            </div>
+          </div>
+            <p class="script-desc">Hub completo para Blox Fruits com auto farm, raids, boss e mais.</p>
+  
+            <div class="code-block" id="code5">loadstring(game:HttpGet("https://raw.githubusercontent.com/bloxfruitsnokey/Stellar/refs/heads/main/Comet/script.luau"))()</div>
+            <div class="btn-row">
+              <button class="copy-btn" data-target="code5" data-text="loadstring(game:HttpGet(&quot;https://raw.githubusercontent.com/bloxfruitsnokey/Stellar/refs/heads/main/Comet/script.luau&quot;))()">copiar script</button>
+              <button class="download-script-btn" data-filename="comet-hub.lua" data-target="code5">baixar .lua</button>
+            </div>
+  
+            <div class="features">
+              <span class="feature">Auto Farm</span>
+              <span class="feature">Raid</span>
+              <span class="feature">Boss</span>
+              <span class="feature">Sem Key</span>
+            </div>
+          </div>
+  <div class="script-card">
+          <div class="game-badge">Blox Fruits</div>
+          <div class="script-header">
+            <img class="script-thumb-small" src="https://img.youtube.com/vi/ORFZZc65Ivk/maxresdefault.jpg" alt="Banana Hub" loading="lazy">
+            <div class="script-header-text">
+              <span class="script-name">Banana Hub</span>
+              <span class="script-ver">v1.0</span>
+            </div>
+          </div>
+            <p class="script-desc">Hub completo para Blox Fruits com auto farm, raids, boss e mais.</p>
+  
+            <div class="code-block" id="code3">loadstring(game:HttpGet("https://raw.githubusercontent.com/x2RunE/Immortal/refs/heads/main/BananaCat-Loader.lua"))()</div>
+            <div class="btn-row">
+              <button class="copy-btn" data-target="code3" data-text="loadstring(game:HttpGet(&quot;https://raw.githubusercontent.com/x2RunE/Immortal/refs/heads/main/BananaCat-Loader.lua&quot;))()">copiar script</button>
+              <button class="download-script-btn" data-filename="banana-hub.lua" data-target="code3">baixar .lua</button>
+            </div>
+  
+            <div class="features">
+              <span class="feature">Auto Farm</span>
+              <span class="feature">Raid</span>
+              <span class="feature">Boss</span>
+              <span class="feature">Sem Key</span>
+            </div>
+          </div>
+        
+          
+
+
+          <div class="script-card">
+            <div class="game-badge">Blox Fruits</div>
+            <div class="script-header">
+              <img class="script-thumb-small" src="https://img.youtube.com/vi/Y8pU18DftjM/maxresdefault.jpg" alt="Teddy Hub" loading="lazy">
+              <div class="script-header-text">
+                <span class="script-name">Teddy Hub</span>
+                <span class="script-ver">v1.0</span>
+              </div>
+            </div>
+            <p class="script-desc">Hub completo para Blox Fruits com auto farm, raids, boss, PvP e mais. NO KEY!</p>
+            <div class="code-block" id="code12">repeat task.wait() until game:IsLoaded() and game:GetService("Players") and game.Players.LocalPlayer and game.Players.LocalPlayer:FindFirstChild("PlayerGui")
+loadstring(game:HttpGet("https://raw.githubusercontent.com/teddyhubdev/diepvy/refs/heads/main/TeddyHub.lua"))()</div>
+            <div class="btn-row">
+              <button class="copy-btn" data-target="code12" data-text="repeat task.wait() until game:IsLoaded() and game:GetService(&quot;Players&quot;) and game.Players.LocalPlayer and game.Players.LocalPlayer:FindFirstChild(&quot;PlayerGui&quot;)
+loadstring(game:HttpGet(&quot;https://raw.githubusercontent.com/teddyhubdev/diepvy/refs/heads/main/TeddyHub.lua&quot;))()">copiar script</button>
+              <button class="download-script-btn" data-filename="teddy-hub.lua" data-target="code12">baixar .lua</button>
+            </div>
+            <div class="features">
+              <span class="feature">Auto Farm</span>
+              <span class="feature">Raid</span>
+              <span class="feature">Boss</span>
+              <span class="feature">PvP</span>
+              <span class="feature">Sem Key</span>
+            </div>
+          </div>
+
+
+          <div class="script-card">
+            <div class="game-badge">Blox Fruits</div>
+            <div class="script-header">
+              <img class="script-thumb-small" src="https://img.youtube.com/vi/qXIJIuUuUCQ/maxresdefault.jpg" alt="Tsuo Hub" loading="lazy">
+              <div class="script-header-text">
+                <span class="script-name">Tsuo Hub</span>
+                <span class="script-ver">v1.0</span>
+              </div>
+            </div>
+            <p class="script-desc">Hub completo para Blox Fruits com auto farm, raids, boss e mais.</p>
+            <div class="code-block" id="code13">loadstring(game:HttpGet("https://raw.githubusercontent.com/Tsuo7/TsuoHub/main/bloxfruits"))()</div>
+            <div class="btn-row">
+              <button class="copy-btn" data-target="code13" data-text="loadstring(game:HttpGet(&quot;https://raw.githubusercontent.com/Tsuo7/TsuoHub/main/bloxfruits&quot;))()">copiar script</button>
+              <button class="download-script-btn" data-filename="tsuo-hub.lua" data-target="code13">baixar .lua</button>
+            </div>
+            <div class="features">
+              <span class="feature">Auto Farm</span>
+              <span class="feature">Raid</span>
+              <span class="feature">Boss</span>
+              <span class="feature">Sem Key</span>
+            </div>
+          </div>
+
+</div>
+
+        <div class="script-page" data-page="3">
+  <div class="script-card">
+          <div class="game-badge">Blox Fruits</div>
+          <div class="script-header">
+            <img class="script-thumb-small" src="https://img.youtube.com/vi/dE374M93550/maxresdefault.jpg" alt="Gravity Hub" loading="lazy">
+            <div class="script-header-text">
+              <span class="script-name">Gravity Hub</span>
+              <span class="script-ver">v1.0</span>
+            </div>
+          </div>
+            <p class="script-desc">Hub completo para Blox Fruits com auto farm, raids, boss, PvP e mais. Loader com configuracoes personalizaveis.</p>
+
+            <div class="code-block" id="code16">GravityHub = {
+    Key = "",
+    Team = "Pirates",
+    Color = "Red",
+    SaveSetting = false,
+    AutoExecute = false
+}
+loadstring(game:HttpGet("https://raw.githubusercontent.com/Dev-GravityHub/BloxFruit/refs/heads/main/MainPremium.lua"))()</div>
+            <div class="btn-row">
+              <button class="copy-btn" data-target="code16" data-text="GravityHub = {
+    Key = &quot;&quot;,
+    Team = &quot;Pirates&quot;,
+    Color = &quot;Red&quot;,
+    SaveSetting = false,
+    AutoExecute = false
+}
+loadstring(game:HttpGet(&quot;https://raw.githubusercontent.com/Dev-GravityHub/BloxFruit/refs/heads/main/MainPremium.lua&quot;))()">copiar script</button>
+              <button class="download-script-btn" data-filename="gravity-hub.lua" data-target="code16">baixar .lua</button>
+            </div>
+
+            <div class="features">
+              <span class="feature">Auto Farm</span>
+              <span class="feature">Raid</span>
+              <span class="feature">Boss</span>
+              <span class="feature">PvP</span>
+              <span class="feature">Sem Key</span>
+            </div>
+          </div>
+        </div>
+
+      </section>
+
+            <!-- PROJETOS ANTIGOS (open source) -->
+      <section class="panel-section" id="antigos">
+        <div class="section-label">// projetos antigos (open source)</div>
+
+        <div class="sub-tabbar" id="antigos-paginator">
+          <button class="sub-tab active" data-page="1">
+            <span class="dot"></span> pagina 1
+          </button>
+        </div>
+
+        <div class="script-page active" data-page="1">
+          <div class="script-card">
+            <div class="game-badge">Blox Fruits</div>
+            <div class="script-header">
+              <img class="script-thumb-small" src="https://img.youtube.com/vi/vMeT83vzptc/maxresdefault.jpg" alt="GHOST kaitun v1" loading="lazy">
+              <div class="script-header-text">
+                <span class="script-name">GHOST kaitun v1</span>
+                <span class="script-ver">v1.0 open source</span>
+              </div>
+            </div>
+            <p class="script-desc">Projeto antigo do kaitun para Blox Fruits, liberado open source. Usem e aproveitem!</p>
+            <div class="warning-box">
+              <span class="icon">⚠️</span>
+              <span>Este é um projeto ANTIGO e open source! Por ser antigo, algumas funções podem não funcionar mais — é com vocês resolverem. Aproveitem o script!</span>
+            </div>
+            <div class="code-block" id="code15">loadstring(game:HttpGet("https://raw.githubusercontent.com/ghosthub031-dev/Ghost-Scripts-opem-Source-/refs/heads/main/ghost_kaitun_v1_opem.soure_projeto.txt"))()</div>
+            <div class="btn-row">
+              <button class="copy-btn" data-target="code15" data-text="loadstring(game:HttpGet(&quot;https://raw.githubusercontent.com/ghosthub031-dev/Ghost-Scripts-opem-Source-/refs/heads/main/ghost_kaitun_v1_opem.soure_projeto.txt&quot;))()">copiar script</button>
+              <button class="download-script-btn" data-filename="ghost-kaitun-v1-open-source.lua" data-target="code15">baixar .lua</button>
+            </div>
+            <div class="features">
+              <span class="feature">Open Source</span>
+              <span class="feature">Auto Farm</span>
+              <span class="feature">Sem Key</span>
+              <span class="feature">Blox Fruits</span>
+            </div>
+          </div>
+
+          <!-- COPIE O MODELO ABAIXO PARA ADICIONAR UM PROJETO ANTIGO:
+
+          <div class="script-card">
+            <div class="game-badge">NOME DO JOGO</div>
+            <div class="script-header">
+              <img class="script-thumb-small" src="URL_DA_THUMB" alt="Nome do Script" loading="lazy">
+              <div class="script-header-text">
+                <span class="script-name">Nome do Script</span>
+                <span class="script-ver">v1.0</span>
+              </div>
+            </div>
+            <p class="script-desc">Descricao do projeto antigo.</p>
+            <div class="code-block" id="codeXX">loadstring(game:HttpGet("URL_DO_SCRIPT"))()</div>
+            <div class="btn-row">
+              <button class="copy-btn" data-target="codeXX" data-text="loadstring(game:HttpGet(&quot;URL_DO_SCRIPT&quot;))()">copiar script</button>
+              <button class="download-script-btn" data-filename="nome-do-script.lua" data-target="codeXX">baixar .lua</button>
+            </div>
+            <div class="features">
+              <span class="feature">Open Source</span>
+              <span class="feature">Sem Key</span>
+            </div>
+          </div>
+
+          -->
+
+        </div>
+
+      </section>
     </div>
-  );
-}
 
+    <div class="social-links">
+      <a href="https://youtube.com/@ghost.scripts.01?si=g0-JwrZYu3g2iQuc" target="_blank" rel="noopener">
+        <span style="font-size:16px;">▶️</span> YouTube
+      </a>
+    </div>
 
+    <footer>© 2026 GHOST SCRIPTS — executores e scripts para Roblox</footer>
+  </div>
 
-==============================================================================
-ARQUIVO: client/src/index.css
-==============================================================================
+  <div class="toast" id="toast">script copiado!</div>
 
-@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap');
-@import "tailwindcss";
-@import "tw-animate-css";
-
-@custom-variant dark (&:is(.dark *));
-
-@theme inline {
-  --radius-sm: calc(var(--radius) - 4px);
-  --radius-md: calc(var(--radius) - 2px);
-  --radius-lg: var(--radius);
-  --radius-xl: calc(var(--radius) + 4px);
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --color-card: var(--card);
-  --color-card-foreground: var(--card-foreground);
-  --color-popover: var(--popover);
-  --color-popover-foreground: var(--popover-foreground);
-  --color-primary: var(--primary);
-  --color-primary-foreground: var(--primary-foreground);
-  --color-secondary: var(--secondary);
-  --color-secondary-foreground: var(--secondary-foreground);
-  --color-muted: var(--muted);
-  --color-muted-foreground: var(--muted-foreground);
-  --color-accent: var(--accent);
-  --color-accent-foreground: var(--accent-foreground);
-  --color-destructive: var(--destructive);
-  --color-destructive-foreground: var(--destructive-foreground);
-  --color-border: var(--border);
-  --color-input: var(--input);
-  --color-ring: var(--ring);
-}
-
-:root {
-  --radius: 0.7rem;
-  --background: oklch(0.11 0.025 270);
-  --foreground: oklch(0.94 0.025 280);
-  --card: oklch(0.15 0.03 273);
-  --card-foreground: oklch(0.94 0.025 280);
-  --popover: oklch(0.15 0.03 273);
-  --popover-foreground: oklch(0.94 0.025 280);
-  --primary: oklch(0.67 0.25 294);
-  --primary-foreground: oklch(0.98 0.01 280);
-  --secondary: oklch(0.18 0.035 275);
-  --secondary-foreground: oklch(0.78 0.04 280);
-  --muted: oklch(0.19 0.03 273);
-  --muted-foreground: oklch(0.62 0.04 280);
-  --accent: oklch(0.22 0.08 292);
-  --accent-foreground: oklch(0.94 0.025 280);
-  --destructive: oklch(0.62 0.22 25);
-  --destructive-foreground: oklch(0.98 0.01 280);
-  --border: oklch(0.3 0.08 282 / 70%);
-  --input: oklch(0.24 0.06 278);
-  --ring: oklch(0.68 0.25 294);
-}
-
-* { box-sizing: border-box; }
-html { scroll-behavior: smooth; }
-body { margin: 0; min-width: 320px; background: #090a12; color: var(--foreground); font-family: 'IBM Plex Sans', system-ui, sans-serif; }
-button, input { font: inherit; }
-button, a { -webkit-tap-highlight-color: transparent; }
-button { cursor: pointer; }
-a { color: inherit; text-decoration: none; }
-
-.site-shell { min-height: 100vh; overflow: hidden; position: relative; background: radial-gradient(circle at 70% -12%, rgba(116, 58, 255, .17), transparent 28rem), radial-gradient(circle at -8% 55%, rgba(70, 22, 155, .1), transparent 28rem), #090a12; }
-.site-shell::before { content: ''; position: fixed; inset: 0; pointer-events: none; opacity: .17; background-image: linear-gradient(rgba(160, 125, 255, .08) 1px, transparent 1px), linear-gradient(90deg, rgba(160, 125, 255, .08) 1px, transparent 1px); background-size: 64px 64px; mask-image: linear-gradient(to bottom, black, transparent 70%); }
-.ambient { position: fixed; width: 520px; height: 520px; border-radius: 50%; pointer-events: none; filter: blur(110px); opacity: .12; }
-.ambient-one { top: 10%; right: -20rem; background: #8f3dff; }
-.ambient-two { bottom: -20rem; left: -18rem; background: #4f32b8; }
-
-.topbar { position: relative; z-index: 3; display: flex; align-items: center; justify-content: space-between; max-width: 1400px; margin: 0 auto; padding: 23px clamp(20px, 5vw, 72px); border-bottom: 1px solid rgba(146, 102, 255, .16); }
-.brand { display: inline-flex; align-items: center; gap: 12px; }
-.brand-mark { display: grid; place-items: center; width: 40px; height: 40px; border: 1px solid rgba(178, 120, 255, .8); border-radius: 12px 12px 15px 15px; color: #d8bcff; font-family: 'IBM Plex Mono', monospace; font-size: 30px; line-height: 1; box-shadow: 0 0 24px rgba(133, 61, 255, .3), inset 0 0 18px rgba(139, 67, 255, .16); transform: rotate(-3deg); }
-.brand-mark span { transform: translateY(-2px); }
-.brand-copy { display: grid; grid-template-columns: auto auto; column-gap: 6px; align-items: baseline; font-family: 'IBM Plex Mono', monospace; letter-spacing: .04em; }
-.brand-copy strong { font-size: 17px; color: #faf8ff; }
-.brand-copy em { font-size: 17px; color: #b481ff; font-style: normal; text-shadow: 0 0 16px rgba(170, 111, 255, .75); }
-.brand-copy small { grid-column: 1 / -1; margin-top: 3px; color: #77728d; font-family: 'IBM Plex Sans', sans-serif; font-size: 11px; letter-spacing: .02em; }
-.top-actions { display: flex; align-items: center; gap: 12px; }
-.top-link, .top-button { display: inline-flex; align-items: center; gap: 8px; padding: 10px 14px; border: 1px solid rgba(151, 100, 255, .35); border-radius: 7px; color: #bab3d4; background: rgba(21, 17, 36, .58); font-family: 'IBM Plex Mono', monospace; font-size: 12px; transition: 180ms ease; }
-.top-link:hover, .top-button:hover { border-color: #a66aff; color: #fff; background: rgba(114, 44, 235, .22); box-shadow: 0 0 24px rgba(126, 55, 255, .18); transform: translateY(-1px); }
-.top-button { color: #f6f1ff; background: linear-gradient(135deg, rgba(110, 37, 255, .55), rgba(60, 24, 146, .4)); }
-
-.page-content { position: relative; z-index: 1; max-width: 1400px; margin: 0 auto; padding: clamp(44px, 7vw, 90px) clamp(20px, 5vw, 72px) 40px; }
-.hero-row { display: flex; align-items: end; justify-content: space-between; gap: 36px; margin-bottom: 42px; }
-.hero-copy { max-width: 740px; }
-.prompt-line { display: flex; align-items: center; gap: 8px; margin-bottom: 15px; color: #a4f4bd; font-family: 'IBM Plex Mono', monospace; font-size: 12px; letter-spacing: .02em; }
-.prompt-line span { color: #9f7be8; }
-.prompt-line i { width: 7px; height: 15px; margin-left: 2px; background: #9cf5ae; animation: blink 1.1s steps(1) infinite; }
-@keyframes blink { 50% { opacity: 0; } }
-.hero-copy h1 { margin: 0; color: #f8f6ff; font-family: 'IBM Plex Mono', monospace; font-size: clamp(36px, 6vw, 76px); font-weight: 700; letter-spacing: -.065em; line-height: .98; text-shadow: 0 0 38px rgba(201, 173, 255, .08); }
-.hero-copy h1 span { color: #9b65ef; text-shadow: 0 0 30px rgba(154, 78, 255, .42); }
-.hero-copy p { max-width: 615px; margin: 20px 0 0; color: #a9a3bc; font-size: 16px; line-height: 1.7; }
-.hero-meta { display: flex; flex-wrap: wrap; gap: 18px; margin-top: 22px; color: #78728c; font-family: 'IBM Plex Mono', monospace; font-size: 11px; }
-.hero-meta span { display: inline-flex; align-items: center; gap: 6px; }
-.hero-meta svg { color: #a77aff; }
-.server-status { display: flex; align-items: center; gap: 12px; min-width: 220px; padding: 15px 17px; border: 1px solid rgba(81, 222, 151, .18); border-radius: 9px; background: linear-gradient(135deg, rgba(17, 37, 37, .65), rgba(10, 16, 26, .5)); color: #7eefa9; box-shadow: 0 12px 34px rgba(0, 0, 0, .18); }
-.server-status > svg { margin-left: auto; opacity: .75; }
-.server-status div { display: grid; gap: 3px; }
-.server-status small { color: #668e7e; font-family: 'IBM Plex Mono', monospace; font-size: 8px; letter-spacing: .12em; }
-.server-status strong { font-family: 'IBM Plex Mono', monospace; font-size: 14px; letter-spacing: .08em; }
-.pulse-dot, .status > span { display: inline-block; width: 9px; height: 9px; border-radius: 50%; background: #62e99a; box-shadow: 0 0 0 4px rgba(98, 233, 154, .1), 0 0 14px rgba(98, 233, 154, .75); }
-
-terminal-window { border: 1px solid rgba(153, 108, 255, .28); border-radius: 10px; background: rgba(10, 11, 20, .76); box-shadow: 0 26px 80px rgba(0, 0, 0, .26), 0 0 50px rgba(81, 34, 177, .08); backdrop-filter: blur(14px); }
-.tabbar { display: flex; overflow-x: auto; border-bottom: 1px solid rgba(143, 101, 255, .17); scrollbar-width: thin; }
-.tab { position: relative; display: inline-flex; flex-shrink: 0; align-items: center; gap: 9px; padding: 17px 26px; border: 0; border-right: 1px solid rgba(143, 101, 255, .12); color: #77718d; background: transparent; font-family: 'IBM Plex Mono', monospace; font-size: 12px; transition: 180ms ease; }
-.tab:hover { color: #c9bdf2; background: rgba(117, 62, 232, .08); }
-.tab.active { color: #f5efff; background: rgba(113, 56, 221, .09); }
-.tab.active::after { content: ''; position: absolute; right: 0; bottom: -1px; left: 0; height: 2px; background: linear-gradient(90deg, #7d31ff, #c487ff); box-shadow: 0 0 13px #933fff; }
-.tab svg { color: #8563c3; }
-.tab.active svg { color: #ba8cff; }
-.tab small { color: #5e5872; font-size: 10px; }
-.panel-head { display: flex; align-items: end; justify-content: space-between; gap: 20px; padding: 31px 32px 22px; }
-.eyebrow { display: flex; align-items: center; gap: 8px; margin: 0 0 8px; color: #706883; font-family: 'IBM Plex Mono', monospace; font-size: 11px; letter-spacing: .06em; text-transform: uppercase; }
-.eyebrow span { color: #b783ff; }
-.panel-head h2 { margin: 0; color: #ede8fa; font-size: clamp(20px, 3vw, 29px); font-weight: 600; letter-spacing: -.03em; }
-.result-count { color: #6c6680; font-family: 'IBM Plex Mono', monospace; font-size: 11px; }
-.toolbar { display: flex; align-items: center; gap: 14px; padding: 0 32px 27px; }
-.search-box { display: flex; align-items: center; flex: 1; gap: 10px; min-height: 43px; padding: 0 13px; border: 1px solid rgba(144, 101, 255, .25); border-radius: 7px; color: #8f77ba; background: rgba(13, 13, 24, .72); transition: 180ms ease; }
-.search-box:focus-within { border-color: #a26cff; box-shadow: 0 0 0 3px rgba(145, 76, 255, .1); }
-.search-box input { width: 100%; border: 0; outline: 0; color: #eee9fa; background: transparent; font-family: 'IBM Plex Mono', monospace; font-size: 12px; }
-.search-box input::placeholder { color: #605a71; }
-.search-box button { border: 0; color: #8e7cae; background: transparent; font-size: 20px; line-height: 1; }
-.filters { display: flex; flex-wrap: wrap; gap: 6px; }
-.filters button { padding: 8px 11px; border: 1px solid rgba(136, 103, 213, .22); border-radius: 5px; color: #82799b; background: rgba(41, 28, 73, .28); font-family: 'IBM Plex Mono', monospace; font-size: 10px; transition: 180ms ease; }
-.filters button:hover, .filters button.selected { border-color: #9b62f7; color: #f1e9ff; background: rgba(117, 46, 229, .28); }
-
-.catalog-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 17px; padding: 0 32px 32px; }
-.script-card { overflow: hidden; border: 1px solid rgba(133, 100, 209, .25); border-radius: 8px; background: linear-gradient(145deg, rgba(27, 19, 49, .72), rgba(16, 14, 28, .85)); box-shadow: 0 16px 38px rgba(0, 0, 0, .19); opacity: 0; animation: card-in .45s cubic-bezier(.23, 1, .32, 1) var(--delay) forwards; transition: 220ms ease; }
-@keyframes card-in { from { opacity: 0; transform: translateY(9px); } to { opacity: 1; transform: translateY(0); } }
-.script-card:hover { border-color: rgba(170, 110, 255, .8); box-shadow: 0 18px 48px rgba(61, 18, 140, .24), 0 0 24px rgba(120, 52, 229, .09); transform: translateY(-3px); }
-.card-image { position: relative; height: 142px; overflow: hidden; border-bottom: 1px solid rgba(155, 108, 255, .19); background: #171124; }
-.card-image::after { content: ''; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(7, 6, 14, .1), rgba(10, 7, 19, .88)); pointer-events: none; }
-.card-image img { width: 100%; height: 100%; object-fit: cover; opacity: .68; filter: saturate(.85) hue-rotate(7deg); transition: 300ms ease; }
-.script-card:hover .card-image img { opacity: .84; transform: scale(1.04); }
-.status { position: absolute; z-index: 1; top: 12px; right: 12px; display: inline-flex; align-items: center; gap: 7px; padding: 5px 8px; border: 1px solid rgba(98, 233, 154, .24); border-radius: 20px; color: #7ef0aa; background: rgba(8, 31, 25, .78); font-family: 'IBM Plex Mono', monospace; font-size: 9px; text-transform: uppercase; }
-.status > span { width: 6px; height: 6px; box-shadow: 0 0 8px currentColor; }
-.status-beta { border-color: rgba(249, 196, 92, .28); color: #f5cb77; background: rgba(48, 35, 11, .78); }
-.status-beta > span { background: #f5cb77; }
-.status-offline { border-color: rgba(241, 106, 134, .28); color: #f694aa; background: rgba(48, 14, 24, .78); }
-.status-offline > span { background: #f694aa; }
-.status-open { border-color: rgba(120, 179, 255, .28); color: #91c7ff; background: rgba(13, 34, 62, .78); }
-.status-open > span { background: #91c7ff; }
-.game-label { position: absolute; z-index: 1; right: 12px; bottom: 11px; left: 12px; color: #d2c9e8; font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: .05em; text-transform: uppercase; }
-.card-body { padding: 17px 17px 16px; }
-.card-title-row { display: flex; align-items: start; justify-content: space-between; gap: 12px; }
-.card-title-row h3 { margin: 0 0 3px; color: #f4efff; font-family: 'IBM Plex Mono', monospace; font-size: 15px; font-weight: 600; }
-.version { color: #a981e9; font-family: 'IBM Plex Mono', monospace; font-size: 10px; }
-.platform { display: inline-flex; align-items: center; gap: 4px; color: #77718d; font-family: 'IBM Plex Mono', monospace; font-size: 9px; text-align: right; }
-.card-description { min-height: 42px; margin: 13px 0 9px; color: #a49bb7; font-size: 12px; line-height: 1.55; }
-.card-info { color: #6f6880; font-family: 'IBM Plex Mono', monospace; font-size: 9px; }
-.card-info span { display: inline-flex; align-items: center; gap: 5px; }
-.tags { display: flex; flex-wrap: wrap; gap: 5px; margin: 13px 0 17px; }
-.tags span { padding: 4px 7px; border: 1px solid rgba(132, 99, 210, .2); border-radius: 4px; color: #9a81ca; background: rgba(112, 59, 211, .1); font-family: 'IBM Plex Mono', monospace; font-size: 9px; }
-.card-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 7px; }
-.primary-action, .secondary-action { display: inline-flex; align-items: center; justify-content: center; gap: 6px; min-height: 34px; padding: 7px 8px; border-radius: 5px; font-family: 'IBM Plex Mono', monospace; font-size: 10px; transition: 160ms ease; }
-.primary-action { border: 1px solid #7d3cff; color: #fff; background: linear-gradient(135deg, #6c2de0, #5122af); box-shadow: 0 5px 18px rgba(113, 43, 232, .18); }
-.primary-action:hover { border-color: #c08cff; background: linear-gradient(135deg, #8645f4, #6530ca); transform: translateY(-1px); }
-.secondary-action { border: 1px solid rgba(140, 109, 203, .28); color: #a69abf; background: rgba(52, 36, 87, .22); }
-.secondary-action:hover { border-color: #8d6ad0; color: #f1eaff; background: rgba(111, 55, 215, .2); transform: translateY(-1px); }
-.primary-action:active, .secondary-action:active, .top-button:active { transform: scale(.97); }
-
-.empty-state { display: grid; justify-items: center; padding: 66px 20px 78px; color: #817890; text-align: center; }
-.empty-state svg { color: #aa73ff; }
-.empty-state h3 { margin: 13px 0 5px; color: #eee8fb; font-family: 'IBM Plex Mono', monospace; font-size: 16px; }
-.empty-state p { margin: 0 0 18px; font-size: 13px; }
-.empty-state button { padding: 8px 14px; border: 1px solid #8550dd; border-radius: 5px; color: #d8baff; background: rgba(118, 56, 224, .18); font-family: 'IBM Plex Mono', monospace; font-size: 11px; }
-.bottom-rail { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; margin-top: 18px; border: 1px solid rgba(133, 100, 209, .16); border-radius: 8px; overflow: hidden; background: rgba(133, 100, 209, .13); }
-.bottom-rail > div, .bottom-rail > a { display: flex; align-items: center; gap: 12px; padding: 15px 18px; background: rgba(16, 13, 28, .7); }
-.bottom-rail > a { transition: 180ms ease; }
-.bottom-rail > a:hover { background: rgba(75, 36, 143, .27); }
-.rail-icon { display: grid; place-items: center; width: 32px; height: 32px; flex-shrink: 0; border: 1px solid rgba(156, 110, 255, .24); border-radius: 7px; color: #a67cff; background: rgba(110, 56, 208, .14); }
-.rail-youtube { color: #ff8da7; border-color: rgba(255, 104, 142, .23); background: rgba(213, 45, 95, .1); }
-.bottom-rail p { display: grid; gap: 3px; margin: 0; }
-.bottom-rail strong { color: #c5badb; font-family: 'IBM Plex Mono', monospace; font-size: 10px; font-weight: 500; }
-.bottom-rail small { color: #6e687e; font-size: 10px; }
-.bottom-rail > a > svg { margin-left: auto; color: #8065b5; }
-.footer { display: flex; align-items: center; justify-content: space-between; max-width: 1400px; margin: 0 auto; padding: 26px clamp(20px, 5vw, 72px) 32px; color: #5e586f; font-family: 'IBM Plex Mono', monospace; font-size: 10px; }
-.footer-brand { display: flex; align-items: center; gap: 9px; }
-.footer-brand .brand-mark { width: 28px; height: 28px; border-radius: 8px 8px 11px 11px; font-size: 21px; }
-.footer-brand > span:last-child { display: grid; gap: 2px; }
-.footer-brand strong { color: #9676cd; font-size: 10px; }
-.footer-brand small { color: #5e586f; font-family: 'IBM Plex Sans', sans-serif; font-size: 9px; }
-.footer-accent { color: #a26cf5; }
-.toast { position: fixed; z-index: 10; right: 24px; bottom: 22px; display: inline-flex; align-items: center; gap: 8px; padding: 11px 15px; border: 1px solid rgba(98, 233, 154, .4); border-radius: 7px; color: #93f1b0; background: rgba(12, 31, 25, .94); box-shadow: 0 15px 35px rgba(0, 0, 0, .35); font-family: 'IBM Plex Mono', monospace; font-size: 11px; animation: toast-in .22s ease-out; }
-@keyframes toast-in { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
-
-@media (max-width: 1050px) { .catalog-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } .toolbar { align-items: stretch; flex-direction: column; } .filters { justify-content: flex-start; } }
-@media (max-width: 720px) { .topbar { align-items: flex-start; gap: 18px; } .top-actions { gap: 7px; } .top-link, .top-button { padding: 9px; } .top-link span, .top-button:not(:first-child) { font-size: 0; } .top-link svg:last-child { display: none; } .hero-row { align-items: flex-start; flex-direction: column; } .server-status { width: 100%; } .panel-head { align-items: flex-start; flex-direction: column; padding: 24px 18px 17px; } .toolbar { padding: 0 18px 22px; } .catalog-grid { grid-template-columns: 1fr; padding: 0 18px 22px; } .bottom-rail { grid-template-columns: 1fr; } .footer { align-items: flex-start; flex-wrap: wrap; gap: 15px; } }
-@media (max-width: 430px) { .brand-copy strong, .brand-copy em { font-size: 14px; } .brand-copy small { font-size: 9px; } .brand-mark { width: 34px; height: 34px; font-size: 25px; } .top-link { display: none; } .page-content { padding-top: 39px; } .hero-copy h1 { font-size: 39px; } .prompt-line { font-size: 10px; } .tab { padding: 15px 18px; } .card-actions { grid-template-columns: 1fr; } }
-@media (prefers-reduced-motion: reduce) { *, *::before, *::after { scroll-behavior: auto !important; animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; } }
-
-dark { color-scheme: dark; }
-.executor-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 17px; padding: 0 32px 32px; }
-.executor-card { padding: 21px; border: 1px solid rgba(133, 100, 209, .25); border-radius: 8px; background: linear-gradient(145deg, rgba(27, 19, 49, .72), rgba(16, 14, 28, .85)); box-shadow: 0 16px 38px rgba(0,0,0,.19); transition: 220ms ease; }
-.executor-card:hover { border-color: rgba(170,110,255,.8); box-shadow: 0 18px 48px rgba(61,18,140,.24); transform: translateY(-3px); }
-.executor-top, .script-header, .script-title-row { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; }
-.executor-top .status { position: static; }
-.executor-kicker { display: inline-flex; align-items: center; gap: 5px; margin-bottom: 7px; color: #8d72c2; font-family: 'IBM Plex Mono', monospace; font-size: 10px; text-transform: uppercase; }
-.executor-card h3, .script-card h3 { margin: 0; color: #f4efff; font-family: 'IBM Plex Mono', monospace; font-size: 16px; font-weight: 600; }
-.executor-card > p { min-height: 44px; margin: 14px 0; color: #a49bb7; font-size: 13px; line-height: 1.55; }
-.executor-card .card-info { display: flex; gap: 15px; margin-bottom: 12px; color: #777087; font-family: 'IBM Plex Mono', monospace; font-size: 10px; }
-.executor-card .card-info span { display: inline-flex; align-items: center; gap: 5px; }
-.sub-tabbar { display: flex; flex-wrap: wrap; gap: 7px; padding: 0 32px 22px; }
-.sub-tab { display: inline-flex; align-items: center; gap: 7px; padding: 8px 13px; border: 1px solid rgba(136,103,213,.26); border-radius: 5px; color: #817696; background: rgba(40,27,73,.3); font-family: 'IBM Plex Mono', monospace; font-size: 11px; transition: 180ms ease; }
-.sub-tab:hover, .sub-tab.active { border-color: #9b62f7; color: #f1e9ff; background: rgba(117,46,229,.28); }
-.sub-dot { width: 6px; height: 6px; border-radius: 50%; background: #676075; }
-.sub-tab.active .sub-dot { background: #7ef0aa; box-shadow: 0 0 8px #7ef0aa; }
-.script-list { display: grid; gap: 17px; padding: 0 32px 32px; }
-.script-list .script-card { padding: 21px; opacity: 1; animation: none; }
-.script-list .script-header { align-items: center; margin-bottom: 12px; }
-.script-list .script-header .status { position: static; }
-.game-badge { display: inline-flex; align-items: center; padding: 5px 10px; border: 1px solid rgba(246,203,113,.22); border-radius: 20px; color: #f4cb78; background: rgba(93,58,11,.22); font-family: 'IBM Plex Mono', monospace; font-size: 10px; text-transform: uppercase; }
-.script-title-row { align-items: center; justify-content: flex-start; }
-.script-title-row > div:not(.script-thumb-small) { flex: 1; }
-.script-title-row .platform { margin-left: auto; color: #77718d; font-family: 'IBM Plex Mono', monospace; font-size: 10px; }
-.script-thumb-small { width: 112px; height: 63px; flex-shrink: 0; border: 1px solid rgba(155,108,255,.25); border-radius: 5px; object-fit: cover; opacity: .76; }
-.version { display: inline-block; margin-top: 4px; color: #a981e9; font-family: 'IBM Plex Mono', monospace; font-size: 10px; }
-.script-list .card-description { min-height: auto; margin: 14px 0; }
-.code-block { overflow-x: auto; margin-bottom: 12px; padding: 14px 16px; border: 1px solid rgba(133,100,209,.2); border-radius: 6px; background: rgba(9,9,17,.78); color: #bfa8ed; font-family: 'IBM Plex Mono', monospace; font-size: 11px; line-height: 1.6; white-space: pre-wrap; word-break: break-word; }
-.code-block code { font-family: inherit; }
-.script-list .card-actions { max-width: 400px; }
-.script-list .tags { margin: 14px 0 0; }
-.status-funcionando { border-color: rgba(98,233,154,.24); color: #7ef0aa; background: rgba(8,31,25,.78); }
-.status-beta { border-color: rgba(249,196,92,.28); color: #f5cb77; background: rgba(48,35,11,.78); }
-.status-fora-do-ar { border-color: rgba(241,106,134,.28); color: #f694aa; background: rgba(48,14,24,.78); }
-.status-open-source { border-color: rgba(120,179,255,.28); color: #91c7ff; background: rgba(13,34,62,.78); }
-.status-funcionando > span { background: #62e99a; }
-.status-beta > span { background: #f5cb77; box-shadow: 0 0 8px #f5cb77; }
-.status-fora-do-ar > span { background: #f694aa; box-shadow: 0 0 8px #f694aa; }
-.status-open-source > span { background: #91c7ff; box-shadow: 0 0 8px #91c7ff; }
-@media (max-width: 800px) { .executor-grid { grid-template-columns: 1fr; } }
-@media (max-width: 720px) { .executor-grid, .script-list { padding-right: 18px; padding-left: 18px; } .sub-tabbar { padding-right: 18px; padding-left: 18px; } .script-title-row { align-items: flex-start; flex-wrap: wrap; } .script-title-row .platform { margin-left: 0; width: 100%; } }
-.tabbar { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); overflow: visible; }
-.tab { justify-content: center; min-width: 0; }
-@media (max-width: 720px) {
-  .tabbar { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-  .tab { padding: 16px 10px; font-size: 11px; }
-}
-.tabbar { display: flex; flex-wrap: nowrap; overflow: hidden; }
-.tab { flex: 1 1 0; min-width: 0; min-height: 64px; padding: 18px 12px; font-size: 13px; }
-.tab span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-@media (max-width: 720px) {
-  .tabbar { display: flex; flex-wrap: nowrap; }
-  .tab { min-height: 58px; padding: 15px 5px; gap: 4px; font-size: 10px; }
-  .tab small { display: none; }
-  .tab svg { width: 13px; height: 13px; }
-}
-/* Reference palette: navy, electric green and restrained violet */
-body { background: #020a14; color: #d8e7f5; }
-.site-shell { background: radial-gradient(circle at 88% 18%, rgba(41, 17, 111, .22), transparent 30rem), radial-gradient(circle at 8% 70%, rgba(0, 174, 132, .09), transparent 25rem), #020a14; }
-.site-shell::before { opacity: .12; background-image: linear-gradient(rgba(42, 151, 190, .08) 1px, transparent 1px), linear-gradient(90deg, rgba(42, 151, 190, .08) 1px, transparent 1px); }
-.ambient-one { background: #138b7c; opacity: .08; }
-.ambient-two { background: #4133a8; opacity: .08; }
-.topbar { border-bottom-color: rgba(58, 123, 158, .3); }
-.brand-mark { border-color: rgba(57, 239, 190, .75); color: #55f2c0; box-shadow: 0 0 24px rgba(0, 219, 163, .23), inset 0 0 18px rgba(0, 198, 155, .12); }
-.brand-copy strong { color: #f1fcff; }
-.brand-copy em { color: #4beac0; text-shadow: 0 0 16px rgba(52, 228, 181, .55); }
-.top-link, .top-button { border-color: rgba(82, 92, 191, .48); color: #a9b5d0; background: rgba(5, 19, 34, .72); }
-.top-link:hover, .top-button:hover { border-color: #42e6bc; color: #e6fff8; background: rgba(7, 119, 97, .25); box-shadow: 0 0 24px rgba(25, 225, 176, .16); }
-.top-button { border-color: #6b42d6; color: #f0ecff; background: linear-gradient(135deg, rgba(90, 46, 212, .6), rgba(42, 29, 115, .55)); }
-.page-content { max-width: 1500px; }
-.prompt-line { color: #8bf2bd; }
-.prompt-line span { color: #8c8ad2; }
-.hero-copy h1 span { color: #45e9bb; text-shadow: 0 0 30px rgba(38, 224, 171, .35); }
-.hero-copy p { color: #a2b2c8; }
-.hero-meta svg { color: #4ce9bd; }
-.terminal-window { border-color: rgba(65, 101, 184, .55); background: rgba(2, 13, 25, .84); box-shadow: 0 26px 80px rgba(0, 0, 0, .34), 0 0 50px rgba(15, 93, 133, .1); }
-.tabbar { border-bottom-color: rgba(61, 108, 158, .3); }
-.tab { border-right-color: rgba(61, 108, 158, .22); color: #8290ae; }
-.tab:hover { color: #c9e5f0; background: rgba(14, 156, 126, .1); }
-.tab.active { color: #eafff9; background: rgba(9, 147, 115, .13); }
-.tab.active::after { background: linear-gradient(90deg, #15c99b, #67f5c8); box-shadow: 0 0 13px #20dbaa; }
-.tab svg, .tab.active svg { color: #4feac0; }
-.panel-head h2 { color: #eaf5ff; }
-.eyebrow span { color: #45e9bb; }
-.result-count { color: #55dfba; }
-.executor-grid, .script-list { gap: 18px; }
-.executor-card, .script-card { border-color: rgba(56, 120, 164, .48); background: linear-gradient(145deg, rgba(5, 26, 41, .9), rgba(3, 14, 28, .94)); box-shadow: 0 16px 38px rgba(0,0,0,.27); }
-.executor-card:hover, .script-card:hover { border-color: rgba(40, 225, 178, .68); box-shadow: 0 18px 48px rgba(0, 100, 110, .18); }
-.executor-kicker { color: #7892b4; }
-.executor-card h3, .script-card h3, .card-title-row h3 { color: #f1f7ff; }
-.executor-card > p, .card-description { color: #a6b6c9; }
-.card-info, .platform { color: #7b91a7; }
-.tags span { border-color: rgba(39, 191, 158, .28); color: #73dcbf; background: rgba(10, 112, 92, .16); }
-.primary-action { border-color: #1fe0ad; color: #eafff8; background: linear-gradient(135deg, #0da77f, #08715f); box-shadow: 0 5px 18px rgba(0, 205, 153, .18); }
-.primary-action:hover { border-color: #72ffda; background: linear-gradient(135deg, #16c798, #0a8a70); }
-.secondary-action { border-color: rgba(107, 73, 213, .7); color: #c0b7ff; background: rgba(42, 27, 107, .3); }
-.secondary-action:hover { border-color: #a68aff; color: #fff; background: rgba(83, 51, 183, .3); }
-.code-block { border-color: rgba(61, 106, 179, .48); background: rgba(1, 11, 23, .88); color: #a8e8d5; }
-.sub-tab { border-color: rgba(74, 95, 178, .38); color: #91a4bd; background: rgba(8, 22, 42, .45); }
-.sub-tab:hover, .sub-tab.active { border-color: #36e2b2; color: #eafff9; background: rgba(10, 125, 99, .26); }
-.sub-tab.active .sub-dot { background: #45e9bb; box-shadow: 0 0 8px #45e9bb; }
-.game-badge { border-color: rgba(45, 213, 171, .35); color: #78e8c6; background: rgba(9, 91, 78, .28); }
-.footer { border-top-color: rgba(59, 112, 155, .3); color: #8394ac; }
-.footer-accent { color: #45e9bb; }
-/* Compact layout */
-.page-content { padding-top: 34px; padding-bottom: 24px; }
-.hero-row { margin-bottom: 26px; gap: 24px; }
-.hero-copy h1 { font-size: clamp(34px, 5vw, 62px); }
-.hero-copy p { margin-top: 12px; }
-.hero-meta { margin-top: 14px; }
-.terminal-window { border-radius: 8px; }
-.panel-head { padding-top: 23px; padding-bottom: 17px; }
-.executor-grid, .script-list { padding-bottom: 22px; }
-.executor-card { padding-top: 17px; padding-bottom: 17px; }
-.executor-card > p { margin-top: 10px; margin-bottom: 10px; }
-.tags { margin-top: 9px; margin-bottom: 11px; }
-.card-actions { gap: 6px; }
-@media (max-width: 760px) { .page-content { padding-top: 22px; } .hero-row { margin-bottom: 20px; } .hero-copy h1 { font-size: 39px; } }
-.status-fora-do-ar { border-color: rgba(255, 77, 105, .65); color: #ff7d91; background: rgba(101, 15, 30, .38); box-shadow: 0 0 12px rgba(255, 48, 82, .12); }
-.status-fora-do-ar > span { background: #ff405f; box-shadow: 0 0 9px #ff405f; }
-.risk-info { color: #ff7186 !important; }
-.risk-tag { border-color: rgba(255, 75, 101, .55) !important; color: #ff8798 !important; background: rgba(117, 17, 35, .26) !important; }
-.status-instável { border-color: rgba(255, 169, 74, .62); color: #ffc16e; background: rgba(100, 53, 11, .36); box-shadow: 0 0 12px rgba(255, 169, 74, .12); }
-.status-instável > span { background: #ffad45; box-shadow: 0 0 9px #ffad45; }
-.executor-filters { display: flex; gap: 8px; padding: 0 32px 22px; border-bottom: 1px solid rgba(59, 112, 155, .18); }
-.executor-filter { display: inline-flex; align-items: center; gap: 7px; min-height: 32px; padding: 7px 13px; border: 1px solid rgba(74, 95, 178, .38); border-radius: 5px; color: #91a4bd; background: rgba(8, 22, 42, .45); font-family: 'IBM Plex Mono', monospace; font-size: 10px; transition: 180ms ease; }
-.executor-filter span { color: #687d99; }
-.executor-filter:hover, .executor-filter.active { border-color: #36e2b2; color: #eafff9; background: rgba(10, 125, 99, .26); box-shadow: 0 0 14px rgba(35, 222, 174, .1); }
-.executor-filter.active span { color: #65edc6; }
-@media (max-width: 600px) { .executor-filters { padding-right: 18px; padding-left: 18px; overflow-x: auto; } }
-.status-sem-evidência { border-color: rgba(144, 160, 184, .48); color: #aebbd0; background: rgba(40, 53, 72, .42); }
-.status-sem-evidência > span { background: #9eacc0; box-shadow: 0 0 8px #9eacc0; }
-
-
-
-==============================================================================
-ARQUIVO: client/src/main.tsx
-==============================================================================
-
-import { createRoot } from "react-dom/client";
-import App from "./App";
-import "./index.css";
-
-createRoot(document.getElementById("root")!).render(<App />);
-
-
-
-==============================================================================
-ARQUIVO: client/src/contexts/ThemeContext.tsx
-==============================================================================
-
-import React, { createContext, useContext, useEffect, useState } from "react";
-
-type Theme = "light" | "dark";
-
-interface ThemeContextType {
-  theme: Theme;
-  toggleTheme?: () => void;
-  switchable: boolean;
-}
-
-const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
-
-interface ThemeProviderProps {
-  children: React.ReactNode;
-  defaultTheme?: Theme;
-  switchable?: boolean;
-}
-
-export function ThemeProvider({
-  children,
-  defaultTheme = "light",
-  switchable = false,
-}: ThemeProviderProps) {
-  const [theme, setTheme] = useState<Theme>(() => {
-    if (switchable) {
-      const stored = localStorage.getItem("theme");
-      return (stored as Theme) || defaultTheme;
-    }
-    return defaultTheme;
+<script>
+  document.querySelectorAll('.tab').forEach(function(tab){
+    tab.addEventListener('click', function(){
+      document.querySelectorAll('.tab').forEach(function(t){ t.classList.remove('active'); });
+      document.querySelectorAll('.panel-section').forEach(function(s){ s.classList.remove('active'); });
+      tab.classList.add('active');
+      var target = tab.getAttribute('data-tab');
+      document.getElementById(target).classList.add('active');
+    });
   });
 
-  useEffect(() => {
-    const root = document.documentElement;
-    if (theme === "dark") {
-      root.classList.add("dark");
-    } else {
-      root.classList.remove("dark");
-    }
-
-    if (switchable) {
-      localStorage.setItem("theme", theme);
-    }
-  }, [theme, switchable]);
-
-  const toggleTheme = switchable
-    ? () => {
-        setTheme(prev => (prev === "light" ? "dark" : "light"));
-      }
-    : undefined;
-
-  return (
-    <ThemeContext.Provider value={{ theme, toggleTheme, switchable }}>
-      {children}
-    </ThemeContext.Provider>
-  );
-}
-
-export function useTheme() {
-  const context = useContext(ThemeContext);
-  if (!context) {
-    throw new Error("useTheme must be used within ThemeProvider");
+  function showToast(msg){
+    var toast = document.getElementById('toast');
+    toast.textContent = msg || 'script copiado!';
+    toast.classList.add('show');
+    setTimeout(function(){ toast.classList.remove('show'); }, 2000);
   }
-  return context;
-}
 
+  function fallbackCopy(txt){
+    var ta = document.createElement('textarea');
+    ta.value = txt;
+    ta.style.cssText = 'position:fixed;left:-9999px;top:0;opacity:0;';
+    document.body.appendChild(ta);
+    ta.focus();
+    ta.select();
+    var ok = false;
+    try{
+      ok = document.execCommand('copy');
+    }catch(e){}
+    document.body.removeChild(ta);
+    return ok;
+  }
 
+  function copyScript(btn, text){
+    function setCopied(){
+      var original = btn.textContent;
+      btn.textContent = 'copiado!';
+      btn.classList.add('copied');
+      showToast('script copiado!');
+      setTimeout(function(){
+        btn.textContent = original;
+        btn.classList.remove('copied');
+      }, 2000);
+    }
 
-==============================================================================
-ARQUIVO: package.json
-==============================================================================
-
-{
-  "name": "ghost-scripts-upgrade",
-  "version": "1.0.0",
-  "type": "module",
-  "license": "MIT",
-  "scripts": {
-    "dev": "vite --host",
-    "build": "vite build && esbuild server/index.ts --platform=node --packages=external --bundle --format=esm --outdir=dist",
-    "start": "NODE_ENV=production node dist/index.js",
-    "preview": "vite preview --host",
-    "check": "tsc --noEmit",
-    "format": "prettier --write ."
-  },
-  "dependencies": {
-    "@hookform/resolvers": "^5.2.2",
-    "@radix-ui/react-accordion": "^1.2.12",
-    "@radix-ui/react-alert-dialog": "^1.1.15",
-    "@radix-ui/react-aspect-ratio": "^1.1.7",
-    "@radix-ui/react-avatar": "^1.1.10",
-    "@radix-ui/react-checkbox": "^1.3.3",
-    "@radix-ui/react-collapsible": "^1.1.12",
-    "@radix-ui/react-context-menu": "^2.2.16",
-    "@radix-ui/react-dialog": "^1.1.15",
-    "@radix-ui/react-dropdown-menu": "^2.1.16",
-    "@radix-ui/react-hover-card": "^1.1.15",
-    "@radix-ui/react-label": "^2.1.7",
-    "@radix-ui/react-menubar": "^1.1.16",
-    "@radix-ui/react-navigation-menu": "^1.2.14",
-    "@radix-ui/react-popover": "^1.1.15",
-    "@radix-ui/react-progress": "^1.1.7",
-    "@radix-ui/react-radio-group": "^1.3.8",
-    "@radix-ui/react-scroll-area": "^1.2.10",
-    "@radix-ui/react-select": "^2.2.6",
-    "@radix-ui/react-separator": "^1.1.7",
-    "@radix-ui/react-slider": "^1.3.6",
-    "@radix-ui/react-slot": "^1.2.3",
-    "@radix-ui/react-switch": "^1.2.6",
-    "@radix-ui/react-tabs": "^1.1.13",
-    "@radix-ui/react-toggle": "^1.1.10",
-    "@radix-ui/react-toggle-group": "^1.1.11",
-    "@radix-ui/react-tooltip": "^1.2.8",
-    "axios": "^1.12.0",
-    "class-variance-authority": "^0.7.1",
-    "clsx": "^2.1.1",
-    "cmdk": "^1.1.1",
-    "embla-carousel-react": "^8.6.0",
-    "express": "^4.21.2",
-    "framer-motion": "^12.23.22",
-    "input-otp": "^1.4.2",
-    "lucide-react": "^0.453.0",
-    "nanoid": "^5.1.5",
-    "next-themes": "^0.4.6",
-    "react": "^19.2.1",
-    "react-day-picker": "^9.11.1",
-    "react-dom": "^19.2.1",
-    "react-hook-form": "^7.64.0",
-    "react-resizable-panels": "^3.0.6",
-    "recharts": "^2.15.2",
-    "sonner": "^2.0.7",
-    "streamdown": "^1.4.0",
-    "tailwind-merge": "^3.3.1",
-    "tailwindcss-animate": "^1.0.7",
-    "vaul": "^1.1.2",
-    "wouter": "^3.3.5",
-    "zod": "^4.1.12"
-  },
-  "devDependencies": {
-    "@builder.io/vite-plugin-jsx-loc": "^0.1.1",
-    "@tailwindcss/typography": "^0.5.15",
-    "@tailwindcss/vite": "^4.1.3",
-    "@types/express": "4.17.21",
-    "@types/google.maps": "^3.58.1",
-    "@types/node": "^24.7.0",
-    "@types/react": "^19.2.1",
-    "@types/react-dom": "^19.2.1",
-    "@vitejs/plugin-react": "^5.0.4",
-    "add": "^2.0.6",
-    "autoprefixer": "^10.4.20",
-    "esbuild": "^0.25.0",
-    "pnpm": "^10.15.1",
-    "postcss": "^8.4.47",
-    "prettier": "^3.6.2",
-    "tailwindcss": "^4.1.14",
-    "tsx": "^4.19.1",
-    "tw-animate-css": "^1.4.0",
-    "typescript": "5.6.3",
-    "vite": "^7.1.7",
-    "vite-plugin-manus-runtime": "^0.0.58",
-    "vitest": "^2.1.4"
-  },
-  "packageManager": "pnpm@10.4.1+sha512.c753b6c3ad7afa13af388fa6d808035a008e30ea9993f58c6663e2bc5ff21679aa834db094987129aa4d488b86df57f7b634981b2f827cdcacc698cc0cfb88af",
-  "pnpm": {
-    "patchedDependencies": {
-      "wouter@3.7.1": "patches/wouter@3.7.1.patch"
-    },
-    "overrides": {
-      "tailwindcss>nanoid": "3.3.7"
+    if(navigator.clipboard && navigator.clipboard.writeText){
+      navigator.clipboard.writeText(text).then(function(){
+        setCopied();
+      }).catch(function(){
+        if(fallbackCopy(text)) setCopied();
+      });
+    }else{
+      if(fallbackCopy(text)) setCopied();
     }
   }
-}
 
-    
+  document.querySelectorAll('.copy-btn').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      var text = btn.getAttribute('data-text');
+      copyScript(btn, text);
+    });
+  });
+
+  function downloadScript(btn){
+    var targetId = btn.getAttribute('data-target');
+    var filename = btn.getAttribute('data-filename');
+    var code = document.getElementById(targetId).textContent;
+
+    var blob = new Blob([code], {type: 'text/plain'});
+    var url = URL.createObjectURL(blob);
+    var a = document.createElement('a');
+    a.href = url;
+    a.download = filename;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+
+    var original = btn.textContent;
+    btn.textContent = 'baixado!';
+    btn.classList.add('downloaded');
+    showToast('arquivo baixado!');
+    setTimeout(function(){
+      btn.textContent = original;
+      btn.classList.remove('downloaded');
+    }, 2000);
+  }
+
+  document.querySelectorAll('.download-script-btn').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      downloadScript(btn);
+    });
+  });
+
+  // Paginação da aba scripts
+  document.querySelectorAll('#scripts-paginator .sub-tab').forEach(function(tab){
+    tab.addEventListener('click', function(){
+      var pageNum = tab.getAttribute('data-page');
+      // Atualizar tabs
+      document.querySelectorAll('#scripts-paginator .sub-tab').forEach(function(t){ t.classList.remove('active'); });
+      tab.classList.add('active');
+      // Atualizar páginas
+      document.querySelectorAll('#scripts .script-page').forEach(function(p){ p.classList.remove('active'); });
+      var targetPage = document.querySelector('#scripts .script-page[data-page="' + pageNum + '"]');
+      if(targetPage) targetPage.classList.add('active');
+    });
+  });
+
+  // Paginação da aba projetos antigos
+  document.querySelectorAll('#antigos-paginator .sub-tab').forEach(function(tab){
+    tab.addEventListener('click', function(){
+      var pageNum = tab.getAttribute('data-page');
+      document.querySelectorAll('#antigos-paginator .sub-tab').forEach(function(t){ t.classList.remove('active'); });
+      tab.classList.add('active');
+      document.querySelectorAll('#antigos .script-page').forEach(function(p){ p.classList.remove('active'); });
+      var targetPage = document.querySelector('#antigos .script-page[data-page="' + pageNum + '"]');
+      if(targetPage) targetPage.classList.add('active');
+    });
+  });
+
+  // Paginação da aba projetos
+  document.querySelectorAll('#projetos-paginator .sub-tab').forEach(function(tab){
+    tab.addEventListener('click', function(){
+      var pageNum = tab.getAttribute('data-page');
+      document.querySelectorAll('#projetos-paginator .sub-tab').forEach(function(t){ t.classList.remove('active'); });
+      tab.classList.add('active');
+      document.querySelectorAll('#projetos .script-page').forEach(function(p){ p.classList.remove('active'); });
+      var targetPage = document.querySelector('#projetos .script-page[data-page="' + pageNum + '"]');
+      if(targetPage) targetPage.classList.add('active');
+    });
+  });
+
+</script>
+</body>
+</html>
