@@ -340,6 +340,87 @@
     font-size:16px;
     flex-shrink:0;
   }
+
+  /* === TUTORIAIS EM VIDEO === */
+  .video-list{display:flex;flex-direction:column;gap:14px;}
+  .video-row{
+    display:flex;align-items:stretch;gap:14px;min-width:0;width:100%;
+    background:#161922;border:1px solid #232733;border-radius:10px;
+    padding:14px 16px;cursor:pointer;transition:background .15s, border-color .15s;
+  }
+  .video-row:hover{background:#1b1f29;border-color:#2d3240;}
+  .video-play{
+    width:54px;height:54px;flex-shrink:0;border-radius:10px;
+    background:rgba(179,146,240,.10);border:1px solid rgba(179,146,240,.25);
+    color:var(--accent-purple);font-size:22px;
+    display:flex;align-items:center;justify-content:center;
+    font-family:'IBM Plex Mono', monospace;
+  }
+  .video-body{flex:1;min-width:0;display:flex;align-items:center;}
+  .video-title-block{
+    flex:1;min-width:0;background:#0e1117;border:1px solid #232733;border-radius:999px;
+    padding:14px 22px;
+    font-family:'IBM Plex Mono', monospace;color:var(--accent-green);
+    font-size:14.5px;white-space:normal;overflow:visible;text-overflow:clip;
+    overflow-wrap:anywhere;position:relative;
+  }
+  .video-title-block::before{
+    content:'$';color:var(--accent-purple);margin-right:14px;
+  }
+  .video-title-block::after{
+    content:'_';display:inline-block;margin-left:14px;
+    color:var(--accent-green);animation:blink 1.1s steps(1) infinite;
+  }
+  .video-meta{display:flex;flex-direction:column;gap:6px;align-items:flex-end;flex-shrink:0;}
+  @media (max-width:600px){
+    .video-row{
+      display:grid;grid-template-columns:54px minmax(0,1fr);
+      grid-template-areas:"play title" "play meta";
+      align-items:center;gap:10px 14px;
+    }
+    .video-play{grid-area:play;}
+    .video-body{grid-area:title;width:100%;}
+    .video-title-block{width:100%;border-radius:14px;padding:10px 12px;}
+    .video-meta{grid-area:meta;flex-direction:row;align-items:center;justify-content:flex-start;flex-wrap:wrap;}
+  }
+  .video-tag{
+    font-family:'IBM Plex Mono', monospace;font-size:11px;
+    padding:4px 10px;border-radius:999px;background:rgba(108,182,255,.12);
+    color:var(--accent-blue);border:1px solid rgba(108,182,255,.25);
+    text-transform:uppercase;letter-spacing:.05em;
+  }
+  .video-status{
+    font-family:'IBM Plex Mono', monospace;font-size:11px;
+    padding:4px 10px;border-radius:999px;
+    display:flex;align-items:center;gap:6px;
+  }
+  .video-status .dot{width:7px;height:7px;border-radius:50%;}
+  .video-status.available{background:rgba(126,231,135,.10);color:var(--accent-green);}
+  .video-status.available .dot{background:var(--accent-green);}
+
+  /* === MODAL DE VIDEO === */
+  .video-modal{
+    position:fixed;inset:0;background:rgba(5,7,12,.86);
+    display:none;align-items:center;justify-content:center;
+    z-index:9999;padding:24px;
+  }
+  .video-modal.show{display:flex;animation:fadein .25s ease;}
+  .video-modal-inner{
+    width:min(960px,96vw);height:min(540px,80vh);
+    background:#0e1117;border:1px solid #2a2e37;border-radius:14px;
+    overflow:hidden;position:relative;
+    display:flex;flex-direction:column;
+  }
+  .video-modal-frame{flex:1;width:100%;height:100%;border:0;background:#000;}
+  .video-modal-close{
+    position:absolute;top:10px;right:10px;z-index:2;
+    width:36px;height:36px;border-radius:50%;
+    background:rgba(0,0,0,.6);border:1px solid rgba(255,255,255,.18);
+    color:#fff;font-size:18px;cursor:pointer;
+    display:flex;align-items:center;justify-content:center;
+    transition:background .15s;
+  }
+  .video-modal-close:hover{background:rgba(180,40,40,.7);}
   .success-box-list .success-msg{
     line-height:1.6;
     text-align:left;
@@ -421,7 +502,7 @@
         <span class="dot"></span> scripts <span class="ext">.lua</span>
       </button>
       <button class="tab" data-tab="antigos">
-        <span class="dot"></span> projetos antigos <span class="ext">.lua</span>
+        <span class="dot"></span> tutorial <span class="ext">.lua</span>
       </button>
     </div>
 
@@ -478,7 +559,7 @@
         </div>
       </section>
 
-            <!-- PROJETOS (seus scripts) -->
+        <!-- PROJETOS (seus scripts) -->
             <section class="panel-section" id="projetos">
         <div class="section-label">// meus projetos</div>
 
@@ -660,7 +741,8 @@
 
       </section>
 
-            <!-- SCRIPTS (de outras pessoas) -->
+      
+      <!-- SCRIPTS (de outras pessoas) -->
             <section class="panel-section" id="scripts">
         <div class="section-label">// scripts da comunidade</div>
 
@@ -968,13 +1050,16 @@ loadstring(game:HttpGet(&quot;https://raw.githubusercontent.com/Dev-GravityHub/B
 
       </section>
 
-      <!-- PROJETOS ANTIGOS (open source) -->
+        <!-- TUTORIAL (projetos antigos + tutoriais) -->
       <section class="panel-section" id="antigos">
-        <div class="section-label">// projetos antigos (open source)</div>
+        <div class="section-label">// tutorial — projetos antigos e materiais de apoio</div>
 
         <div class="sub-tabbar" id="antigos-paginator">
           <button class="sub-tab active" data-page="1">
-            <span class="dot"></span> pagina 1
+            <span class="dot"></span> projetos antigos
+          </button>
+          <button class="sub-tab" data-page="2">
+            <span class="dot"></span> tutoriais
           </button>
         </div>
 
@@ -1031,6 +1116,70 @@ loadstring(game:HttpGet(&quot;https://raw.githubusercontent.com/Dev-GravityHub/B
 
           -->
 
+          <div class="script-card">
+            <div class="game-badge">Tutorial IA</div>
+            <div class="script-header">
+              <svg class="script-thumb-small ghost-thumb" viewBox="0 0 130 74" role="img" aria-label="Thumbnail Ghost Hub IA com aparência de fantasma" xmlns="http://www.w3.org/2000/svg">
+                <defs>
+                  <radialGradient id="ghost-glow" cx="50%" cy="47%" r="58%">
+                    <stop offset="0%" stop-color="#b392f0" stop-opacity=".38"/>
+                    <stop offset="100%" stop-color="#101217" stop-opacity="0"/>
+                  </radialGradient>
+                  <linearGradient id="ghost-body" x1="0" y1="0" x2="1" y2="1">
+                    <stop offset="0%" stop-color="#ffffff"/>
+                    <stop offset="100%" stop-color="#c9c2e6"/>
+                  </linearGradient>
+                  <filter id="ghost-shadow" x="-40%" y="-40%" width="180%" height="180%">
+                    <feGaussianBlur stdDeviation="3"/>
+                  </filter>
+                </defs>
+                <rect width="130" height="74" rx="4" fill="#101217"/>
+                <ellipse cx="65" cy="39" rx="43" ry="32" fill="url(#ghost-glow)"/>
+                <path d="M36 66V37a29 29 0 0 1 58 0v28c-5-1-8-5-13-5s-8 6-15 6-10-6-16-6-9 5-14 6Z" fill="#b392f0" opacity=".42" filter="url(#ghost-shadow)"/>
+                <path d="M39 63V37a26 26 0 0 1 52 0v25c-5 0-8-5-13-5s-8 6-13 6-9-6-14-6-8 5-12 6Z" fill="url(#ghost-body)" stroke="#e8e6f5" stroke-width="1.2"/>
+                <ellipse cx="56" cy="39" rx="3.2" ry="5" fill="#222031"/>
+                <ellipse cx="74" cy="39" rx="3.2" ry="5" fill="#222031"/>
+                <path d="M60 50q5 4 10 0" fill="none" stroke="#82759e" stroke-width="1.8" stroke-linecap="round"/>
+                <circle cx="22" cy="20" r="1.5" fill="#7ee787"/>
+                <circle cx="107" cy="52" r="1.5" fill="#b392f0"/>
+              </svg>
+              <div class="script-header-text">
+                <span class="script-name">Ghost Hub IA</span>
+                <span class="script-ver">v1.0 ✨</span>
+              </div>
+            </div>
+            <p class="script-desc">Script do tutorial feito com IA, universal.</p>
+
+            <div class="code-block" id="code20">loadstring(game:HttpGet("https://raw.githubusercontent.com/cagarebom96-svg/Ghost-hub-/refs/heads/main/deepseek_lua_20260928_f66cfa.lua"))()</div>
+            <div class="btn-row">
+              <button class="copy-btn" data-target="code20" data-text="loadstring(game:HttpGet(&quot;https://raw.githubusercontent.com/cagarebom96-svg/Ghost-hub-/refs/heads/main/deepseek_lua_20260928_f66cfa.lua&quot;))()">copiar script</button>
+              <button class="download-script-btn" data-filename="ghost-hub-ia.lua" data-target="code20">baixar .lua</button>
+            </div>
+
+            <div class="features">
+              <span class="feature">Tutorial</span>
+              <span class="feature">IA</span>
+              <span class="feature">Universal</span>
+              <span class="feature">Sem Key</span>
+              <span class="feature">Open Source</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="script-page" data-page="2">
+          <div class="section-label">// tutoriais em video</div>
+          <div class="video-list">
+            <div class="video-row" data-video-id="1saUMfiaJLuYMPMmeAqKovGpmDS7H96lc" role="button" tabindex="0">
+              <div class="video-play">▶</div>
+              <div class="video-body">
+                <div class="video-title-block">Como criar um script para Roblox usando IA</div>
+              </div>
+              <div class="video-meta">
+                <span class="video-tag">video</span>
+                <span class="video-status available"><span class="dot"></span> disponivel</span>
+              </div>
+            </div>
+          </div>
         </div>
 
       </section>
@@ -1046,6 +1195,14 @@ loadstring(game:HttpGet(&quot;https://raw.githubusercontent.com/Dev-GravityHub/B
   </div>
 
   <div class="toast" id="toast">script copiado!</div>
+
+  <!-- Modal de video (tutoriais) -->
+  <div class="video-modal" id="videoModal" aria-hidden="true">
+    <div class="video-modal-inner">
+      <button class="video-modal-close" id="videoModalClose" type="button" aria-label="Fechar">✕</button>
+      <iframe class="video-modal-frame" id="videoModalFrame" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+    </div>
+  </div>
 
 <script>
   document.querySelectorAll('.tab').forEach(function(tab){
@@ -1109,6 +1266,44 @@ loadstring(game:HttpGet(&quot;https://raw.githubusercontent.com/Dev-GravityHub/B
       copyScript(btn, text);
     });
   });
+
+  // === Modal de video (TUTORIAIS EM VIDEO) ===
+  (function(){
+    var modal = document.getElementById('videoModal');
+    var frame = document.getElementById('videoModalFrame');
+    var closeBtn = document.getElementById('videoModalClose');
+    if(!modal || !frame || !closeBtn) return;
+
+    function open(id){
+      frame.src = 'https://drive.google.com/file/d/' + id + '/preview';
+      modal.classList.add('show');
+      modal.setAttribute('aria-hidden', 'false');
+    }
+    function close(){
+      modal.classList.remove('show');
+      modal.setAttribute('aria-hidden', 'true');
+      frame.src = '';
+    }
+
+    closeBtn.addEventListener('click', close);
+    modal.addEventListener('click', function(e){
+      if(e.target === modal) close();
+    });
+    document.addEventListener('keydown', function(e){
+      if(e.key === 'Escape' && modal.classList.contains('show')) close();
+    });
+
+    document.querySelectorAll('.video-row').forEach(function(row){
+      function handle(){
+        var id = row.getAttribute('data-video-id');
+        if(id){ open(id); }
+      }
+      row.addEventListener('click', handle);
+      row.addEventListener('keydown', function(e){
+        if(e.key === 'Enter' || e.key === ' '){ e.preventDefault(); handle(); }
+      });
+    });
+  })();
 
   function downloadScript(btn){
     var targetId = btn.getAttribute('data-target');
